@@ -8,10 +8,10 @@
 
   rules:
     - name: Zabbix Alert - SELinux Change
-      condition: event.payload.trigger_name == "Security Alert - selinux-config has been changed"
+      condition: event.payload.trigger_name is match('Security Alert DevSec',ignorecase=true)
       action:
         run_job_template:
-          name: "LINUX Workshop - SELinux Config"
+          name: "LINUX Workshop - OS Hardening"
           organization: Default
           job_args:
             extra_vars:

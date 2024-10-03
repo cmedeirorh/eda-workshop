@@ -1,5 +1,5 @@
 ---
-- name: Perform Linux Hardening using DevSec roles (https://galaxy.ansible.com/ui/repo/published/devsec/hardening)
+- name: Perform Linux Hardening using DevSec roles 
   hosts: all
   become: true
 

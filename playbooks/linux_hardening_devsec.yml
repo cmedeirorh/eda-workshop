@@ -1,6 +1,6 @@
 ---
 - name: Perform Linux Hardening using DevSec roles 
-  hosts: all
+  hosts: '{{ _hosts }}'
   become: true
 
   roles:

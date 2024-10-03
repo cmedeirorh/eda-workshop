@@ -24,7 +24,7 @@
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_agent2.conf
       search_string: 'Server=127.0.0.1'
-      line: 'Server="{{ zabbix_server }}"'
+      line: 'Server={{ zabbix_server }}'
       backup: true
 
   - name: Config Zabbix Agent as root

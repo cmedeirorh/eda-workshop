@@ -527,7 +527,7 @@ zabbix_export:
           preprocessing:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
-                - 1h
+                - 10m
           tags:
             - tag: component
               value: security
@@ -555,7 +555,7 @@ zabbix_export:
           preprocessing:
             - type: DISCARD_UNCHANGED_HEARTBEAT
               parameters:
-                - 30m
+                - 10m
           tags:
             - tag: component
               value: security

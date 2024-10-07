@@ -13,6 +13,3 @@
         run_job_template:
           name: "LINUX Workshop - OS Hardening"
           organization: Default
-          job_args:
-            extra_vars:
-              _hosts: "{{ event.payload.event.hostname }}"

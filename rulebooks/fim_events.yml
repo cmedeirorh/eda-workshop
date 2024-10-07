@@ -10,6 +10,6 @@
     - name: FIM Alerts - file change
       condition: event.payload.event.operation is match('write',ignorecase=true)
       action:
-        run_job_template:
-          name: "LINUX Workshop - OS Hardening"
+        run_workflow_template:
+          name: "Fim Events Workflow"
           organization: Default

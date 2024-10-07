@@ -17,6 +17,7 @@
       name: fim
       enabled: true
       state: started
+      
   - name: Set a hostname
     ansible.builtin.hostname:
       name: '{{ inventory_hostname }}'

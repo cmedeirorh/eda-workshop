@@ -1,6 +1,6 @@
 ---
 - name: Perform Linux Hardening using DevSec roles 
-  hosts: '{{ _hosts }}'
+  hosts: '{{ ansible_eda.event.hostname }}'
   become: true
 
   roles:

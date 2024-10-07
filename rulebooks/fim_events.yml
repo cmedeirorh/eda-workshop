@@ -1,0 +1,18 @@
+---
+- name: Respond to Zabbix Events
+  hosts: all
+  sources:
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 35002
+
+  rules:
+    - name: FIM Alerts - file change
+      condition: event.payload.event.operation is match('write',ignorecase=true)
+      action:
+        run_job_template:
+          name: "LINUX Workshop - OS Hardening"
+          organization: Default
+          job_args:
+            extra_vars:
+              _hosts: "{{ event.payload.event.hostname }}"

@@ -1,0 +1,17 @@
+{{ ansible_managed | comment }}
+node: "FIM"
+events:
+  destination: both
+  file: /var/lib/fim/events.json
+  endpoint:
+    address: {{ eda-webhook }}
+    insecure: true
+    credentials:
+      user: eda-user
+      token: 4TuMLQkyxD8Q7onfIq1NLi2kQz2XF
+monitor:
+  - path: /etc/ssh
+    labels: ["workshop"]
+log:
+  file: /var/log/fim/fim.log
+  level: info

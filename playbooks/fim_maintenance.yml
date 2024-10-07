@@ -1,6 +1,6 @@
 ---
 - name: Set FIM into maintenance
-  hosts: all
+  hosts: '{{ ansible_eda.event.payload.event.hostname }}'
   become: yes
  
   tasks:

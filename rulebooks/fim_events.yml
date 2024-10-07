@@ -1,5 +1,5 @@
 ---
-- name: Respond to Zabbix Events
+- name: Respond to FIM Events
   hosts: all
   sources:
     - ansible.eda.webhook:

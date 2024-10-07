@@ -8,3 +8,8 @@
     ansible.builtin.systemd:
       name: fim
       state: '{{ required_state }}'
+
+  - name: Pause for service to sync
+    ansible.builtin.pause:
+      minutes: 1
+      

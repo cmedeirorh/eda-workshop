@@ -1,0 +1,10 @@
+---
+- name: Set FIM into maintenance
+  hosts: all
+  become: yes
+ 
+  tasks:
+  - name: Disable FIM process
+    ansible.builtin.systemd:
+      name: fim
+      state: stopped

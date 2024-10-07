@@ -12,6 +12,14 @@ events:
 monitor:
   - path: /etc/ssh
     labels: ["workshop"]
+  - path: /etc/modprobe.d/dev-sec.conf
+    labels: ["devsec"]
+  - path: /etc/audit/auditd.conf
+    labels: ["devsec"]    
+  - path: /etc/security/limits.d/10.hardcore.conf
+    labels: ["devsec"]  
+  - path: /etc/systemd/coredump.conf.d/custom.conf
+    labels: ["devsec"]
 log:
   file: /var/log/fim/fim.log
   level: info

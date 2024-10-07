@@ -4,7 +4,7 @@
   become: yes
  
   tasks:
-  - name: Disable FIM process
+  - name: Start/Stop FIM process
     ansible.builtin.systemd:
       name: fim
-      state: stopped
+      state: '{{ required_state }}'

@@ -11,6 +11,7 @@
     ansible.builtin.dnf:
       name: '{{ installer_url }}'
       state: present
+      disable_gpg_check: true
   
   - name: Enable and activate the service
     ansible.builtin.systemd:

@@ -20,6 +20,12 @@ monitor:
     labels: ["devsec"]  
   - path: /etc/systemd/coredump.conf.d/custom.conf
     labels: ["devsec"]
+  - path: /etc/pam.d/system-auth
+    labels: ["devsec"]
+  - path: /etc/pam.d/password-auth-local
+    labels: ["devsec"]
+  - path: /etc/pam.d/password-auth
+    labels: ["devsec"]
 log:
   file: /var/log/fim/fim.log
   level: info

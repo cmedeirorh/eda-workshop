@@ -11,5 +11,5 @@
 
   - name: Pause for service to sync
     ansible.builtin.pause:
-      minutes: 1
+      seconds: 10
       

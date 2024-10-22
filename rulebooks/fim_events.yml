@@ -11,5 +11,5 @@
       condition: event.payload.event.operation is match('write',ignorecase=true)
       action:
         run_workflow_template:
-          name: "Fim Events Workflow"
+          name: "WORKFLOW - FIM Events Response"
           organization: Default

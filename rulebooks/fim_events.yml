@@ -8,14 +8,14 @@
 
   rules:
     - name: FIM Alerts - DevSec managed file has changed
-      condition: event.payload.event.labels[0] == "fim"
+      condition: event.payload.event.labels[0] == "fim" and event.payload.event.operation is match('write',ignorecase=true)
       action:
-        run_job_template:
-          name: "SETUP 2 - Linux Deploy FIM"
+        run_workflow_template:
+          name: "WORKFLOW - Linux redeploy FIM"
           organization: Default
           
     - name: FIM Alerts - playbook managed file has changed
-      condition: event.payload.event.operation is match('write',ignorecase=true)
+      condition: event.payload.event.labels[0] == "devsec" and event.payload.event.operation is match('write',ignorecase=true)
       action:
         run_workflow_template:
           name: "WORKFLOW - FIM Events Response"

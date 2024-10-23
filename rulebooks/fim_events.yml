@@ -11,12 +11,12 @@
       condition: event.payload.event.labels[0] == "fim" and event.payload.event.operation is match('write',ignorecase=true)
       action:
         run_workflow_template:
-          name: "WORKFLOW - Linux redeploy FIM"
+          name: "WORKFLOW - Redeploy FIM service"
           organization: Default
           
     - name: FIM Alerts - playbook managed file has changed
       condition: event.payload.event.labels[0] == "devsec" and event.payload.event.operation is match('write',ignorecase=true)
       action:
         run_workflow_template:
-          name: "WORKFLOW - FIM Events Response"
+          name: "WORKFLOW - Redeploy DevSec Role"
           organization: Default

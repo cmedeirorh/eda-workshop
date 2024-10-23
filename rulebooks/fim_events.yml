@@ -7,7 +7,14 @@
         port: 35002
 
   rules:
-    - name: FIM Alerts - file change
+    - name: FIM Alerts - DevSec managed file has changed
+      condition: event.payload.event.labels[0] == "fim"
+      action:
+        run_job_template:
+          name: "SETUP 2 - Linux Deploy FIM"
+          organization: Default
+          
+    - name: FIM Alerts - playbook managed file has changed
       condition: event.payload.event.operation is match('write',ignorecase=true)
       action:
         run_workflow_template:

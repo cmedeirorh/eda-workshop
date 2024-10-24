@@ -1,6 +1,6 @@
 ---
 - name: RHEL deploy FIM
-  hosts: all
+  hosts: '{{ ansible_eda.event.payload.event.hostname }}'
   become: yes
   vars:
     installer_url: 'https://github.com/Achiefs/fim/releases/download/v0.5.0/fim-0.5.0-1.x86_64.rpm'

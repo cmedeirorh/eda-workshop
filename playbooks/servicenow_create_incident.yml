@@ -1,6 +1,6 @@
 ---
 - name: Check for updates on RHEL and create ServiceNow
-  hosts: all
+  hosts: '{{ ansible_eda.event.payload.event.hostname }}'
   become: true
 
   tasks:

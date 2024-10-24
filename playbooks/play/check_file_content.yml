@@ -1,6 +1,7 @@
 ---
 - name: Show content of a file
   hosts: all
+  become: yes
 
   tasks:
     - name: Get file content

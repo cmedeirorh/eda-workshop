@@ -1,0 +1,32 @@
+---
+- name: RHEL deploy FIM
+  hosts: all
+  become: yes
+  vars:
+    installer_url: 'https://github.com/Achiefs/fim/releases/download/v0.5.0/fim-0.5.0-1.x86_64.rpm'
+    eda_webhook: REPLACE_ME
+
+  tasks:
+  - name: Install required packages
+    ansible.builtin.dnf:
+      name: '{{ installer_url }}'
+      state: present
+      disable_gpg_check: true
+
+  - name: Populate FIM config file
+    ansible.builtin.template:
+      src: ../../files/fim.j2
+      dest: /etc/fim/config.yml
+      owner: root
+      group: root
+      mode: '0640'
+        
+  - name: Enable and activate the service
+    ansible.builtin.systemd:
+      name: fim
+      enabled: true
+      state: started
+      
+  - name: Set a hostname
+    ansible.builtin.hostname:
+      name: '{{ inventory_hostname }}'

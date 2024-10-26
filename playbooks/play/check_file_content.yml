@@ -1,0 +1,13 @@
+---
+- name: Show content of a file
+  hosts: '{{ survey_hosts }}'
+  become: yes
+
+  tasks:
+    - name: Get file content
+      command: /bin/cat '{{ file_path }}'
+      register: content
+
+    - name: Print content
+      ansible.builtin.debug:
+        msg="{{ content.stdout_lines }}"

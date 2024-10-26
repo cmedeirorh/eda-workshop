@@ -1,0 +1,19 @@
+---
+- name: Get to Falcon Events
+  hosts: all
+  sources:
+    - crowdstrike.falcon.eventstream:
+        falcon_client_id: "{{ FALCON_CLIENT_ID }}"
+        falcon_client_secret: "{{ FALCON_CLIENT_SECRET }}"
+        falcon_cloud: "us-2"
+        # offset: 12345
+        stream_name: "eda-example"
+        include_event_types:
+          - "DetectionSummaryEvent"
+
+  rules:
+    - name: Catch all
+      condition: event.falcon is defined
+      action:
+        debug:
+          var: event.falcon

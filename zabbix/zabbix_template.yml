@@ -1,0 +1,2139 @@
+zabbix_export:
+  version: '6.4'
+  template_groups:
+    - uuid: 846977d1dfed4968bc5f8bdb363285bc
+      name: 'Templates/Operating systems'
+  templates:
+    - uuid: 2fc6668d54ea4ecb9ab7a3e88f0a9824
+      template: 'Linux by Zabbix - Security'
+      name: 'Linux by Zabbix - Security'
+      groups:
+        - name: 'Templates/Operating systems'
+      items:
+        - uuid: 09cf65589e564acbbd556e507d222b36
+          name: 'Linux: Host name of Zabbix agent running'
+          key: agent.hostname
+          delay: 1h
+          history: 7d
+          value_type: CHAR
+          trends: '0'
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1d
+          tags:
+            - tag: component
+              value: system
+        - uuid: e7f386f5cd3e4bcab5c64f756a420591
+          name: 'Linux: Zabbix agent ping'
+          key: agent.ping
+          delay: 30s
+          history: 7d
+          description: 'The agent always returns 1 for this item. It could be used in combination with nodata() for availability check.'
+          valuemap:
+            name: 'Zabbix agent ping status'
+          tags:
+            - tag: component
+              value: system
+        - uuid: 3054468101c4456fb306165f79d8064b
+          name: 'Linux: Version of Zabbix agent running'
+          key: agent.version
+          delay: 1h
+          history: 7d
+          value_type: CHAR
+          trends: '0'
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1d
+          tags:
+            - tag: component
+              value: application
+        - uuid: aea790d7053645f498f1ac11531aacd0
+          name: 'Linux: Maximum number of open file descriptors'
+          key: kernel.maxfiles
+          delay: 1h
+          history: 7d
+          description: 'It could be increased by using `sysctl` utility or modifying the file `/etc/sysctl.conf`.'
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1d
+          tags:
+            - tag: component
+              value: system
+          triggers:
+            - uuid: 597e2bc5bb7749a8b694fdbb43d97a05
+              expression: 'last(/Linux by Zabbix - Security/kernel.maxfiles)<{$KERNEL.MAXFILES.MIN}'
+              name: 'Linux: Configured max number of open filedescriptors is too low'
+              event_name: 'Linux: Configured max number of open filedescriptors is too low (< {$KERNEL.MAXFILES.MIN})'
+              priority: INFO
+              tags:
+                - tag: scope
+                  value: performance
+        - uuid: fb4e0776d9c84cdb814cc840503316cc
+          name: 'Linux: Maximum number of processes'
+          key: kernel.maxproc
+          delay: 1h
+          history: 7d
+          description: 'It could be increased by using `sysctl` utility or modifying the file `/etc/sysctl.conf`.'
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1d
+          tags:
+            - tag: component
+              value: system
+          triggers:
+            - uuid: b7df821aabf74bf5bf6a8c70086f1bdb
+              expression: 'last(/Linux by Zabbix - Security/kernel.maxproc)<{$KERNEL.MAXPROC.MIN}'
+              name: 'Linux: Configured max number of processes is too low'
+              event_name: 'Linux: Configured max number of processes is too low (< {$KERNEL.MAXPROC.MIN})'
+              priority: INFO
+              dependencies:
+                - name: 'Linux: Getting closer to process limit'
+                  expression: 'last(/Linux by Zabbix - Security/proc.num)/last(/Linux by Zabbix - Security/kernel.maxproc)*100>80'
+              tags:
+                - tag: scope
+                  value: performance
+        - uuid: 3e2cb6194bd241f0bf6e40c74a82eaba
+          name: 'Linux: Number of processes'
+          key: proc.num
+          history: 7d
+          tags:
+            - tag: component
+              value: system
+        - uuid: 0eaada2884b844598612b31dec8da7a7
+          name: 'Linux: Number of running processes'
+          key: 'proc.num[,,run]'
+          history: 7d
+          tags:
+            - tag: component
+              value: system
+        - uuid: 45fabb22bf14448180cc180bfa4c82c3
+          name: 'Linux: System boot time'
+          key: system.boottime
+          delay: 15m
+          history: 7d
+          units: unixtime
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1h
+          tags:
+            - tag: component
+              value: system
+        - uuid: d11ad70cb8474fa9b6f3ba5be12e5b1f
+          name: 'Linux: Interrupts per second'
+          key: system.cpu.intr
+          history: 7d
+          value_type: FLOAT
+          preprocessing:
+            - type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: 825b746da69a4d69b8189223447d7a94
+          name: 'Linux: Load average (1m avg)'
+          key: 'system.cpu.load[all,avg1]'
+          history: 7d
+          value_type: FLOAT
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: cf7c272435eb4fc296ba8f53d9228ab1
+          name: 'Linux: Load average (5m avg)'
+          key: 'system.cpu.load[all,avg5]'
+          history: 7d
+          value_type: FLOAT
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: 935ed6ed4620492597c5fa85cdbaafa4
+          name: 'Linux: Load average (15m avg)'
+          key: 'system.cpu.load[all,avg15]'
+          history: 7d
+          value_type: FLOAT
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: 46b0d33ff22548a4a575b01d21cd077c
+          name: 'Linux: Number of CPUs'
+          key: system.cpu.num
+          history: 7d
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1d
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: 2e67c0e7613e45f998add7351053e8c7
+          name: 'Linux: Context switches per second'
+          key: system.cpu.switches
+          history: 7d
+          value_type: FLOAT
+          preprocessing:
+            - type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: d96e4bfca341453daf131f6cef972684
+          name: 'Linux: CPU utilization'
+          type: DEPENDENT
+          key: system.cpu.util
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The CPU utilization expressed in %.'
+          preprocessing:
+            - type: JAVASCRIPT
+              parameters:
+                - |
+                  //Calculate utilization
+                  return (100 - value)
+          master_item:
+            key: 'system.cpu.util[,idle]'
+          tags:
+            - tag: component
+              value: cpu
+          triggers:
+            - uuid: 2d81198765f348f5b50f18dda93446e2
+              expression: 'min(/Linux by Zabbix - Security/system.cpu.util,5m)>{$CPU.UTIL.CRIT}'
+              name: 'Linux: High CPU utilization'
+              event_name: 'Linux: High CPU utilization (over {$CPU.UTIL.CRIT}% for 5m)'
+              opdata: 'Current utilization: {ITEM.LASTVALUE1}'
+              priority: WARNING
+              description: 'The CPU utilization is too high. The system might be slow to respond.'
+              dependencies:
+                - name: 'Linux: Load average is too high'
+                  expression: |
+                    min(/Linux by Zabbix - Security/system.cpu.load[all,avg1],5m)/last(/Linux by Zabbix - Security/system.cpu.num)>{$LOAD_AVG_PER_CPU.MAX.WARN}
+                    and last(/Linux by Zabbix - Security/system.cpu.load[all,avg5])>0
+                    and last(/Linux by Zabbix - Security/system.cpu.load[all,avg15])>0
+              tags:
+                - tag: scope
+                  value: performance
+        - uuid: eb6a30c225634a9ea1092d48ef87e9bf
+          name: 'Linux: CPU guest time'
+          key: 'system.cpu.util[,guest]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'Guest time - the time spent on running a virtual CPU for a guest operating system.'
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: 6b9596efa3094c0f8291821fd6d02517
+          name: 'Linux: CPU guest nice time'
+          key: 'system.cpu.util[,guest_nice]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The time spent on running a niced guest (a virtual CPU for guest operating systems under the control of the Linux kernel).'
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: 87b34810e77b44dab1d8adb3d2641314
+          name: 'Linux: CPU idle time'
+          key: 'system.cpu.util[,idle]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The time the CPU has spent doing nothing.'
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: 20fb5f5adcd8491bb572f290b4a3e031
+          name: 'Linux: CPU interrupt time'
+          key: 'system.cpu.util[,interrupt]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The amount of time the CPU has been servicing hardware interrupts.'
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: 2087f8c266d74418baebc05be1eb2b7f
+          name: 'Linux: CPU iowait time'
+          key: 'system.cpu.util[,iowait]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The amount of time the CPU has been waiting for I/O to complete.'
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: 3d5a6b4253284eb8bf5aa84d943649a4
+          name: 'Linux: CPU nice time'
+          key: 'system.cpu.util[,nice]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The time the CPU has spent running users'' processes that have been niced.'
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: b90e1c411f9745fa98b9e435f2cf7c11
+          name: 'Linux: CPU softirq time'
+          key: 'system.cpu.util[,softirq]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The amount of time the CPU has been servicing software interrupts.'
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: 15445bc38c034425bcba3296f613599d
+          name: 'Linux: CPU steal time'
+          key: 'system.cpu.util[,steal]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The amount of "stolen" CPU from this virtual machine by the hypervisor for other tasks, such as running another virtual machine.'
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: bbc14ab2b8474165a2c36e514b1d649b
+          name: 'Linux: CPU system time'
+          key: 'system.cpu.util[,system]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The time the CPU has spent running the kernel and its processes.'
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: 472f08b197d944838bb2d1fc57d5b33f
+          name: 'Linux: CPU user time'
+          key: 'system.cpu.util[,user]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The time the CPU has spent running users'' processes that are not niced.'
+          tags:
+            - tag: component
+              value: cpu
+        - uuid: 5b6817dc8b58492da5328bffa84c3c25
+          name: 'Linux: System name'
+          key: system.hostname
+          delay: 1h
+          history: 7d
+          value_type: CHAR
+          trends: '0'
+          description: 'The host name of the system.'
+          inventory_link: NAME
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 12h
+          tags:
+            - tag: component
+              value: system
+          triggers:
+            - uuid: ce3d480c7f1f4aca8b9709a2925983ba
+              expression: 'change(/Linux by Zabbix - Security/system.hostname) and length(last(/Linux by Zabbix - Security/system.hostname))>0'
+              name: 'Linux: System name has changed'
+              event_name: 'Linux: System name has changed (new name: {ITEM.VALUE})'
+              priority: INFO
+              description: 'The name of the system has changed. Acknowledge to close the problem manually.'
+              manual_close: 'YES'
+              tags:
+                - tag: scope
+                  value: notice
+                - tag: scope
+                  value: security
+        - uuid: eb309068f4314a13b12e55de9cd8bd33
+          name: 'Linux: System local time'
+          key: system.localtime
+          history: 7d
+          units: unixtime
+          description: 'The local system time of the host.'
+          tags:
+            - tag: component
+              value: system
+          triggers:
+            - uuid: 4948e83373bc478995cb75e2bf130620
+              expression: 'fuzzytime(/Linux by Zabbix - Security/system.localtime,{$SYSTEM.FUZZYTIME.MAX})=0'
+              name: 'Linux: System time is out of sync'
+              event_name: 'Linux: System time is out of sync (diff with Zabbix server > {$SYSTEM.FUZZYTIME.MAX}s)'
+              priority: WARNING
+              description: 'The host''s system time is different from Zabbix server time.'
+              manual_close: 'YES'
+              tags:
+                - tag: scope
+                  value: availability
+                - tag: scope
+                  value: performance
+        - uuid: fa4e5d48f69d41279bab8f0ba8fe7e71
+          name: 'Linux: Operating system architecture'
+          key: system.sw.arch
+          delay: 1h
+          history: 7d
+          value_type: CHAR
+          trends: '0'
+          description: 'The architecture of the operating system.'
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1d
+          tags:
+            - tag: component
+              value: os
+        - uuid: 42efb54e80e54edf854232bda95921ac
+          name: 'Linux: Operating system'
+          key: system.sw.os
+          delay: 1h
+          history: 7d
+          value_type: CHAR
+          trends: '0'
+          inventory_link: OS
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1d
+          tags:
+            - tag: component
+              value: os
+          triggers:
+            - uuid: 32f9bb5cee134a5f88702010433df16d
+              expression: 'change(/Linux by Zabbix - Security/system.sw.os) and length(last(/Linux by Zabbix - Security/system.sw.os))>0'
+              name: 'Linux: Operating system description has changed'
+              priority: INFO
+              description: 'The description of the operating system has changed. Possible reasons are that the system has been updated or replaced. Acknowledge to close the problem manually.'
+              manual_close: 'YES'
+              dependencies:
+                - name: 'Linux: System name has changed'
+                  expression: 'change(/Linux by Zabbix - Security/system.hostname) and length(last(/Linux by Zabbix - Security/system.hostname))>0'
+              tags:
+                - tag: scope
+                  value: notice
+        - uuid: 8776ad0c25ff4fa7bb0a2682117877bc
+          name: 'Linux: Number of installed packages'
+          key: system.sw.packages.get
+          delay: 1h
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.length()
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 12h
+          tags:
+            - tag: component
+              value: os
+            - tag: component
+              value: security
+          triggers:
+            - uuid: dca2fd527f1a46c185783cb228cf6b56
+              expression: 'change(/Linux by Zabbix - Security/system.sw.packages.get)<>0'
+              name: 'Linux: Number of installed packages has been changed'
+              priority: WARNING
+              manual_close: 'YES'
+              tags:
+                - tag: scope
+                  value: notice
+        - uuid: 8c2a2b14b14046d5a509660067dca1c8
+          name: 'Linux: Free swap space'
+          key: 'system.swap.size[,free]'
+          history: 7d
+          units: B
+          description: 'The free space of the swap volume/file expressed in bytes.'
+          tags:
+            - tag: component
+              value: memory
+            - tag: component
+              value: storage
+        - uuid: d1461ea77f69411e9bc11a04f2574d2e
+          name: 'Linux: Free swap space in %'
+          key: 'system.swap.size[,pfree]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The free space of the swap volume/file expressed in %.'
+          tags:
+            - tag: component
+              value: memory
+            - tag: component
+              value: storage
+        - uuid: ca7850ad0776443480a5cdd932c81d8e
+          name: 'Linux: Total swap space'
+          key: 'system.swap.size[,total]'
+          history: 7d
+          units: B
+          description: 'The total space of the swap volume/file expressed in bytes.'
+          tags:
+            - tag: component
+              value: memory
+            - tag: component
+              value: storage
+        - uuid: 2741b74ce4074e128b7b6f45b1998074
+          name: 'Linux: System description'
+          key: system.uname
+          delay: 15m
+          history: 7d
+          value_type: CHAR
+          trends: '0'
+          description: 'The information as normally returned by `uname -a`.'
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 12h
+          tags:
+            - tag: component
+              value: system
+        - uuid: b689b4fd0c2341d7a57ee38dc140361e
+          name: 'Linux: System uptime'
+          key: system.uptime
+          delay: 30s
+          history: 7d
+          trends: '0'
+          units: uptime
+          description: 'The system uptime expressed in the following format: "N days, hh:mm:ss".'
+          tags:
+            - tag: component
+              value: system
+          triggers:
+            - uuid: 4d1dc01ab7774c8c86c8060647a42f31
+              expression: 'last(/Linux by Zabbix - Security/system.uptime)<10m'
+              name: 'Linux: {HOST.NAME} has been restarted'
+              event_name: 'Linux: {HOST.NAME} has been restarted (uptime < 10m)'
+              priority: WARNING
+              description: 'The host uptime is less than 10 minutes.'
+              manual_close: 'YES'
+              tags:
+                - tag: scope
+                  value: notice
+        - uuid: 99092cc962f34c9e89eaf13beb2ce70d
+          name: 'Linux: Number of logged in users'
+          key: system.users.num
+          history: 7d
+          description: 'The number of users who are currently logged in.'
+          tags:
+            - tag: component
+              value: environment
+        - uuid: 159663bd61c7494881633b2e3b3450f2
+          name: 'Linux: Checksum of /etc/passwd'
+          key: 'vfs.file.cksum[/etc/passwd,sha256]'
+          history: 7d
+          value_type: CHAR
+          trends: '0'
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 10m
+          tags:
+            - tag: component
+              value: security
+          triggers:
+            - uuid: d9b5ccca7d6b42508abc7a4aa9935c54
+              expression: 'last(/Linux by Zabbix - Security/vfs.file.cksum[/etc/passwd,sha256],#1)<>last(/Linux by Zabbix - Security/vfs.file.cksum[/etc/passwd,sha256],#2)'
+              name: 'Linux: /etc/passwd has been changed'
+              priority: HIGH
+              manual_close: 'YES'
+              dependencies:
+                - name: 'Linux: Operating system description has changed'
+                  expression: 'change(/Linux by Zabbix - Security/system.sw.os) and length(last(/Linux by Zabbix - Security/system.sw.os))>0'
+                - name: 'Linux: System name has changed'
+                  expression: 'change(/Linux by Zabbix - Security/system.hostname) and length(last(/Linux by Zabbix - Security/system.hostname))>0'
+              tags:
+                - tag: scope
+                  value: security
+        - uuid: df1ec1ea608f4111879bd0e4d4f52c42
+          name: 'Linux: Checksum of /etc/selinux/config'
+          key: 'vfs.file.cksum[/etc/selinux/config,sha256]'
+          delay: 30s
+          history: 7d
+          value_type: CHAR
+          trends: '0'
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 10m
+          tags:
+            - tag: component
+              value: security
+          triggers:
+            - uuid: b0b3b3de35ec4f11ae059f444a68004d
+              expression: 'last(/Linux by Zabbix - Security/vfs.file.cksum[/etc/selinux/config,sha256],#1)<>last(/Linux by Zabbix - Security/vfs.file.cksum[/etc/selinux/config,sha256],#2)'
+              name: 'Security Alert - selinux-config has been changed'
+              priority: HIGH
+              manual_close: 'YES'
+              dependencies:
+                - name: 'Linux: Operating system description has changed'
+                  expression: 'change(/Linux by Zabbix - Security/system.sw.os) and length(last(/Linux by Zabbix - Security/system.sw.os))>0'
+                - name: 'Linux: System name has changed'
+                  expression: 'change(/Linux by Zabbix - Security/system.hostname) and length(last(/Linux by Zabbix - Security/system.hostname))>0'
+              tags:
+                - tag: scope
+                  value: security
+        - uuid: d17cea9c946642078674284673e91f52
+          name: 'Linux: Checksum of /etc/ssh/moduli'
+          key: 'vfs.file.cksum[/etc/ssh/moduli,sha256]'
+          history: 7d
+          value_type: CHAR
+          trends: '0'
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1h
+          tags:
+            - tag: component
+              value: security
+          triggers:
+            - uuid: 06ec7996cf82423a9bc560789c00be22
+              expression: 'last(/Linux by Zabbix - Security/vfs.file.cksum[/etc/ssh/moduli,sha256],#1)<>last(/Linux by Zabbix - Security/vfs.file.cksum[/etc/ssh/moduli,sha256],#2)'
+              name: 'Linux: /etc/ssh/moduli has been changed'
+              priority: HIGH
+              manual_close: 'YES'
+              dependencies:
+                - name: 'Linux: Operating system description has changed'
+                  expression: 'change(/Linux by Zabbix - Security/system.sw.os) and length(last(/Linux by Zabbix - Security/system.sw.os))>0'
+                - name: 'Linux: System name has changed'
+                  expression: 'change(/Linux by Zabbix - Security/system.hostname) and length(last(/Linux by Zabbix - Security/system.hostname))>0'
+              tags:
+                - tag: scope
+                  value: security
+        - uuid: 6545f429b8804ffb831c1fe9bc8b1b52
+          name: 'Linux: Get filesystems'
+          key: vfs.fs.get
+          history: '0'
+          value_type: TEXT
+          trends: '0'
+          description: 'The `vfs.fs.get` key acquires raw information set about the file systems. Later to be extracted by preprocessing in dependent items.'
+          tags:
+            - tag: component
+              value: raw
+        - uuid: 49ef85b25c5d42c99b9eea61e4f9bd55
+          name: 'Linux: Available memory'
+          key: 'vm.memory.size[available]'
+          history: 7d
+          units: B
+          description: |
+            The available memory:
+            - in Linux - available = free + buffers + cache;
+            - on other platforms calculation may vary.
+
+            See also Appendixes in Zabbix Documentation about parameters of the `vm.memory.size` item.
+          tags:
+            - tag: component
+              value: memory
+        - uuid: 68243bb696fd4bc795e1f20fff01c4e4
+          name: 'Linux: Available memory in %'
+          key: 'vm.memory.size[pavailable]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The available memory as percentage of the total. See also Appendixes in Zabbix Documentation about parameters of the `vm.memory.size` item.'
+          tags:
+            - tag: component
+              value: memory
+        - uuid: b3909c280ef24fdb879437d78c8ef578
+          name: 'Linux: Total memory'
+          key: 'vm.memory.size[total]'
+          history: 7d
+          units: B
+          description: 'The total memory expressed in bytes.'
+          tags:
+            - tag: component
+              value: memory
+        - uuid: 3eed5d6743c24365be7d3341d06cc1b2
+          name: 'Linux: Memory utilization'
+          type: DEPENDENT
+          key: vm.memory.utilization
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The percentage of used memory is calculated as `100-pavailable`.'
+          preprocessing:
+            - type: JAVASCRIPT
+              parameters:
+                - 'return (100-value);'
+          master_item:
+            key: 'vm.memory.size[pavailable]'
+          tags:
+            - tag: component
+              value: memory
+          triggers:
+            - uuid: 723541bb898c4b6195031b9bd35e8d12
+              expression: 'min(/Linux by Zabbix - Security/vm.memory.utilization,5m)>{$MEMORY.UTIL.MAX}'
+              name: 'Linux: High memory utilization'
+              event_name: 'Linux: High memory utilization (>{$MEMORY.UTIL.MAX}% for 5m)'
+              priority: AVERAGE
+              description: 'The system is running out of free memory.'
+              dependencies:
+                - name: 'Linux: Lack of available memory'
+                  expression: 'max(/Linux by Zabbix - Security/vm.memory.size[available],5m)<{$MEMORY.AVAILABLE.MIN} and last(/Linux by Zabbix - Security/vm.memory.size[total])>0'
+              tags:
+                - tag: scope
+                  value: capacity
+                - tag: scope
+                  value: performance
+        - uuid: 90629149920042168ab75322a29482d2
+          name: 'Linux: Zabbix agent availability'
+          type: INTERNAL
+          key: 'zabbix[host,agent,available]'
+          history: 7d
+          description: 'Monitoring the availability status of the agent.'
+          valuemap:
+            name: zabbix.host.available
+          tags:
+            - tag: component
+              value: system
+          triggers:
+            - uuid: 66d230fdcae7466fbff501e3a08e9013
+              expression: 'max(/Linux by Zabbix - Security/zabbix[host,agent,available],{$AGENT.TIMEOUT})=0'
+              name: 'Linux: Zabbix agent is not available'
+              event_name: 'Linux: Zabbix agent is not available (for {$AGENT.TIMEOUT})'
+              priority: AVERAGE
+              description: 'For passive only agents, host availability is used with {$AGENT.TIMEOUT} as time threshold.'
+              manual_close: 'YES'
+              tags:
+                - tag: scope
+                  value: availability
+      discovery_rules:
+        - uuid: 20ad3d741d4e49d698ac2387bcf7209c
+          name: 'Network interface discovery'
+          key: net.if.discovery
+          delay: 1h
+          filter:
+            evaltype: AND
+            conditions:
+              - macro: '{#IFNAME}'
+                value: '{$NET.IF.IFNAME.MATCHES}'
+                formulaid: A
+              - macro: '{#IFNAME}'
+                value: '{$NET.IF.IFNAME.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: B
+          description: 'The discovery of network interfaces.'
+          item_prototypes:
+            - uuid: 0201a0db7e0247fea9fed2a030274bc3
+              name: 'Interface {#IFNAME}: Inbound packets discarded'
+              key: 'net.if.in["{#IFNAME}",dropped]'
+              delay: 3m
+              history: 7d
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              tags:
+                - tag: component
+                  value: network
+                - tag: interface
+                  value: '{#IFNAME}'
+            - uuid: a8b5d64c2a9e42cc8d67b06819738153
+              name: 'Interface {#IFNAME}: Inbound packets with errors'
+              key: 'net.if.in["{#IFNAME}",errors]'
+              delay: 3m
+              history: 7d
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              tags:
+                - tag: component
+                  value: network
+                - tag: interface
+                  value: '{#IFNAME}'
+            - uuid: 0be3d08439664f7f888f96c3dd269da3
+              name: 'Interface {#IFNAME}: Bits received'
+              key: 'net.if.in["{#IFNAME}"]'
+              delay: 3m
+              history: 7d
+              units: bps
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                - type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                - tag: component
+                  value: network
+                - tag: interface
+                  value: '{#IFNAME}'
+            - uuid: 19228dc08c044dccb565c4c937817e15
+              name: 'Interface {#IFNAME}: Outbound packets discarded'
+              key: 'net.if.out["{#IFNAME}",dropped]'
+              delay: 3m
+              history: 7d
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              tags:
+                - tag: component
+                  value: network
+                - tag: interface
+                  value: '{#IFNAME}'
+            - uuid: ecb359c4234546bf9f8ac6586da44f1a
+              name: 'Interface {#IFNAME}: Outbound packets with errors'
+              key: 'net.if.out["{#IFNAME}",errors]'
+              delay: 3m
+              history: 7d
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              tags:
+                - tag: component
+                  value: network
+                - tag: interface
+                  value: '{#IFNAME}'
+            - uuid: 7b0ec9a37def43a49615a0a119435860
+              name: 'Interface {#IFNAME}: Bits sent'
+              key: 'net.if.out["{#IFNAME}"]'
+              delay: 3m
+              history: 7d
+              units: bps
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                - type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                - tag: component
+                  value: network
+                - tag: interface
+                  value: '{#IFNAME}'
+            - uuid: 303fd483009c446a86ab46398a3ecaa1
+              name: 'Interface {#IFNAME}: Operational status'
+              key: 'vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"]'
+              history: 7d
+              trends: '0'
+              description: 'Reference: https://www.kernel.org/doc/Documentation/networking/operstates.txt'
+              valuemap:
+                name: ifOperStatus
+              preprocessing:
+                - type: JAVASCRIPT
+                  parameters:
+                    - |
+                      var newvalue;
+                      switch(value) {
+                        case "unknown":
+                          newvalue = 0;
+                          break;
+                        case "notpresent":
+                          newvalue = 1;
+                          break;
+                        case "down":
+                          newvalue = 2;
+                          break;
+                        case "lowerlayerdown":
+                          newvalue = 3;
+                          break;
+                        case "testing":
+                          newvalue = 4;
+                          break;
+                        case "dormant":
+                          newvalue = 5;
+                          break;
+                        case "up":
+                          newvalue = 6;
+                          break;  default:
+                          newvalue = "Problem parsing interface operstate in JS";
+                      }
+                      return newvalue;
+              tags:
+                - tag: component
+                  value: network
+                - tag: interface
+                  value: '{#IFNAME}'
+              trigger_prototypes:
+                - uuid: 318e3461f0174a95ab527cc0618a9808
+                  expression: '{$IFCONTROL:"{#IFNAME}"}=1 and last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"])=2 and (last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"],#1)<>last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"],#2))'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"])<>2 or {$IFCONTROL:"{#IFNAME}"}=0'
+                  name: 'Interface {#IFNAME}: Link down'
+                  opdata: 'Current state: {ITEM.LASTVALUE1}'
+                  priority: AVERAGE
+                  description: |
+                    This trigger expression works as follows:
+                    1. It can be triggered if the operations status is down.
+                    2. `{$IFCONTROL:"{#IFNAME}"}=1` - a user can redefine context macro to value - 0. That marks this interface as not important. No new trigger will be fired if this interface is down.
+                    3. `{TEMPLATE_NAME:METRIC.diff()}=1` - the trigger fires only if the operational status was up to (1) sometime before (so, do not fire for the 'eternal off' interfaces.)
+
+                    WARNING: if closed manually - it will not fire again on the next poll, because of .diff.
+                  manual_close: 'YES'
+                  tags:
+                    - tag: scope
+                      value: availability
+            - uuid: 0a7ff7c9446c48ea94f4990d19eecd82
+              name: 'Interface {#IFNAME}: Speed'
+              key: 'vfs.file.contents["/sys/class/net/{#IFNAME}/speed"]'
+              delay: 5m
+              history: 7d
+              trends: '0'
+              units: bps
+              description: |
+                It indicates the latest or current speed value of the interface. The value is an integer representing the link speed expressed in bits/sec.
+                This attribute is only valid for the interfaces that implement the ethtool `get_link_ksettings` method (mostly Ethernet).
+
+                Reference: https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-net
+              preprocessing:
+                - type: MULTIPLIER
+                  parameters:
+                    - '1000000'
+                - type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - 1h
+              tags:
+                - tag: component
+                  value: network
+                - tag: interface
+                  value: '{#IFNAME}'
+            - uuid: e0582d1c4ce74dd88549cc10cc2b7783
+              name: 'Interface {#IFNAME}: Interface type'
+              key: 'vfs.file.contents["/sys/class/net/{#IFNAME}/type"]'
+              delay: 1h
+              history: 7d
+              trends: '0'
+              description: |
+                It indicates the interface protocol type as a decimal value.
+                See `include/uapi/linux/if_arp.h` for all possible values.
+                Reference: https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-net
+              valuemap:
+                name: 'Linux::Interface protocol types'
+              preprocessing:
+                - type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - 1d
+              tags:
+                - tag: component
+                  value: network
+                - tag: interface
+                  value: '{#IFNAME}'
+          trigger_prototypes:
+            - uuid: ccee68102fb14ca3b015563220da078c
+              expression: |
+                change(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/speed"])<0 and last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/speed"])>0
+                and
+                (last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/type"])=6 or last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/type"])=1)
+                and
+                (last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"])<>2)
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: |
+                (change(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/speed"])>0 and last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/speed"],#2)>0) or
+                (last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"])=2)
+              name: 'Interface {#IFNAME}: Ethernet has changed to lower speed than it was before'
+              opdata: 'Current reported speed: {ITEM.LASTVALUE1}'
+              priority: INFO
+              description: 'This Ethernet connection has transitioned down from its known maximum speed. This might be a sign of autonegotiation issues. Acknowledge to close the problem manually.'
+              manual_close: 'YES'
+              dependencies:
+                - name: 'Interface {#IFNAME}: Link down'
+                  expression: '{$IFCONTROL:"{#IFNAME}"}=1 and last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"])=2 and (last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"],#1)<>last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"],#2))'
+                  recovery_expression: 'last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"])<>2 or {$IFCONTROL:"{#IFNAME}"}=0'
+              tags:
+                - tag: scope
+                  value: performance
+            - uuid: ad253e9601324c5c8dca49d02e605da8
+              expression: |
+                (avg(/Linux by Zabbix - Security/net.if.in["{#IFNAME}"],15m)>({$IF.UTIL.MAX:"{#IFNAME}"}/100)*last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/speed"]) or
+                avg(/Linux by Zabbix - Security/net.if.out["{#IFNAME}"],15m)>({$IF.UTIL.MAX:"{#IFNAME}"}/100)*last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/speed"])) and
+                last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/speed"])>0
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: |
+                avg(/Linux by Zabbix - Security/net.if.in["{#IFNAME}"],15m)<(({$IF.UTIL.MAX:"{#IFNAME}"}-3)/100)*last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/speed"]) and
+                avg(/Linux by Zabbix - Security/net.if.out["{#IFNAME}"],15m)<(({$IF.UTIL.MAX:"{#IFNAME}"}-3)/100)*last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/speed"])
+              name: 'Interface {#IFNAME}: High bandwidth usage'
+              event_name: 'Interface {#IFNAME}: High bandwidth usage (>{$IF.UTIL.MAX:"{#IFNAME}"}%)'
+              opdata: 'In: {ITEM.LASTVALUE1}, out: {ITEM.LASTVALUE3}, speed: {ITEM.LASTVALUE2}'
+              priority: WARNING
+              description: 'The utilization of the network interface is close to its estimated maximum bandwidth.'
+              manual_close: 'YES'
+              dependencies:
+                - name: 'Interface {#IFNAME}: Link down'
+                  expression: '{$IFCONTROL:"{#IFNAME}"}=1 and last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"])=2 and (last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"],#1)<>last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"],#2))'
+                  recovery_expression: 'last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"])<>2 or {$IFCONTROL:"{#IFNAME}"}=0'
+              tags:
+                - tag: scope
+                  value: performance
+            - uuid: 849466e359dc420d8a7e9d903be717ef
+              expression: |
+                min(/Linux by Zabbix - Security/net.if.in["{#IFNAME}",errors],5m)>{$IF.ERRORS.WARN:"{#IFNAME}"}
+                or min(/Linux by Zabbix - Security/net.if.out["{#IFNAME}",errors],5m)>{$IF.ERRORS.WARN:"{#IFNAME}"}
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: |
+                max(/Linux by Zabbix - Security/net.if.in["{#IFNAME}",errors],5m)<{$IF.ERRORS.WARN:"{#IFNAME}"}*0.8
+                and max(/Linux by Zabbix - Security/net.if.out["{#IFNAME}",errors],5m)<{$IF.ERRORS.WARN:"{#IFNAME}"}*0.8
+              name: 'Interface {#IFNAME}: High error rate'
+              event_name: 'Interface {#IFNAME}: High error rate (>{$IF.ERRORS.WARN:"{#IFNAME}"} for 5m)'
+              opdata: 'errors in: {ITEM.LASTVALUE1}, errors out: {ITEM.LASTVALUE2}'
+              priority: WARNING
+              description: 'It recovers when it is below 80% of the `{$IF.ERRORS.WARN:"{#IFNAME}"}` threshold.'
+              manual_close: 'YES'
+              dependencies:
+                - name: 'Interface {#IFNAME}: Link down'
+                  expression: '{$IFCONTROL:"{#IFNAME}"}=1 and last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"])=2 and (last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"],#1)<>last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"],#2))'
+                  recovery_expression: 'last(/Linux by Zabbix - Security/vfs.file.contents["/sys/class/net/{#IFNAME}/operstate"])<>2 or {$IFCONTROL:"{#IFNAME}"}=0'
+              tags:
+                - tag: scope
+                  value: availability
+                - tag: scope
+                  value: performance
+          graph_prototypes:
+            - uuid: b26112b9de964a3796246389f4bd9f4a
+              name: 'Interface {#IFNAME}: Network traffic'
+              graph_items:
+                - drawtype: GRADIENT_LINE
+                  color: 199C0D
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'net.if.in["{#IFNAME}"]'
+                - sortorder: '1'
+                  drawtype: BOLD_LINE
+                  color: F63100
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'net.if.out["{#IFNAME}"]'
+                - sortorder: '2'
+                  color: 00611C
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'net.if.out["{#IFNAME}",errors]'
+                - sortorder: '3'
+                  color: F7941D
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'net.if.in["{#IFNAME}",errors]'
+                - sortorder: '4'
+                  color: FC6EA3
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'net.if.out["{#IFNAME}",dropped]'
+                - sortorder: '5'
+                  color: 6C59DC
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'net.if.in["{#IFNAME}",dropped]'
+        - uuid: 5cbd7c5722004ded9f4d23ada202a2f0
+          name: 'Block devices discovery'
+          key: vfs.dev.discovery
+          delay: 1h
+          filter:
+            evaltype: AND
+            conditions:
+              - macro: '{#DEVNAME}'
+                value: '{$VFS.DEV.DEVNAME.MATCHES}'
+                formulaid: A
+              - macro: '{#DEVNAME}'
+                value: '{$VFS.DEV.DEVNAME.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: B
+              - macro: '{#DEVTYPE}'
+                value: disk
+                formulaid: C
+          item_prototypes:
+            - uuid: 3c7e5508700f4f8899975b806a2c3d7c
+              name: '{#DEVNAME}: Disk average queue size (avgqu-sz)'
+              type: DEPENDENT
+              key: 'vfs.dev.queue_size[{#DEVNAME}]'
+              delay: '0'
+              history: 7d
+              value_type: FLOAT
+              description: 'The current average disk queue; the number of requests outstanding on the disk while the performance data is being collected.'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$[10]'
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+              master_item:
+                key: 'vfs.file.contents[/sys/block/{#DEVNAME}/stat]'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: disk
+                  value: '{#DEVNAME}'
+            - uuid: 1bf362472f0f44448ad8e123cf005799
+              name: '{#DEVNAME}: Disk read request avg waiting time (r_await)'
+              type: CALCULATED
+              key: 'vfs.dev.read.await[{#DEVNAME}]'
+              history: 7d
+              value_type: FLOAT
+              units: '!ms'
+              params: '(last(//vfs.dev.read.time.rate[{#DEVNAME}])/(last(//vfs.dev.read.rate[{#DEVNAME}])+(last(//vfs.dev.read.rate[{#DEVNAME}])=0)))*1000*(last(//vfs.dev.read.rate[{#DEVNAME}]) > 0)'
+              description: 'This formula contains two Boolean expressions that evaluate to 1 or 0 in order to set the calculated metric to zero and to avoid the exception - division by zero.'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: disk
+                  value: '{#DEVNAME}'
+            - uuid: 136f176aa9dd4f5a8bf413cb3a931150
+              name: '{#DEVNAME}: Disk read rate'
+              type: DEPENDENT
+              key: 'vfs.dev.read.rate[{#DEVNAME}]'
+              delay: '0'
+              history: 7d
+              value_type: FLOAT
+              units: '!r/s'
+              description: 'r/s (read operations per second) - the number (after merges) of read requests completed per second for the device.'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$[0]'
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              master_item:
+                key: 'vfs.file.contents[/sys/block/{#DEVNAME}/stat]'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: disk
+                  value: '{#DEVNAME}'
+            - uuid: b3fbbc98e1bb47a48b748fc5f3ceead9
+              name: '{#DEVNAME}: Disk read time (rate)'
+              type: DEPENDENT
+              key: 'vfs.dev.read.time.rate[{#DEVNAME}]'
+              delay: '0'
+              history: 7d
+              value_type: FLOAT
+              description: 'The rate of total read time counter; used in `r_await` calculation.'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$[3]'
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+              master_item:
+                key: 'vfs.file.contents[/sys/block/{#DEVNAME}/stat]'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: disk
+                  value: '{#DEVNAME}'
+            - uuid: fb2809e26c384d04bbcc831b31ced26e
+              name: '{#DEVNAME}: Disk utilization'
+              type: DEPENDENT
+              key: 'vfs.dev.util[{#DEVNAME}]'
+              delay: '0'
+              history: 7d
+              value_type: FLOAT
+              units: '%'
+              description: 'This item is the percentage of elapsed time during which the selected disk drive was busy while servicing read or write requests.'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$[9]'
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.1'
+              master_item:
+                key: 'vfs.file.contents[/sys/block/{#DEVNAME}/stat]'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: disk
+                  value: '{#DEVNAME}'
+            - uuid: c0eb76c0476841afbd718ee5225a34b4
+              name: '{#DEVNAME}: Disk write request avg waiting time (w_await)'
+              type: CALCULATED
+              key: 'vfs.dev.write.await[{#DEVNAME}]'
+              history: 7d
+              value_type: FLOAT
+              units: '!ms'
+              params: '(last(//vfs.dev.write.time.rate[{#DEVNAME}])/(last(//vfs.dev.write.rate[{#DEVNAME}])+(last(//vfs.dev.write.rate[{#DEVNAME}])=0)))*1000*(last(//vfs.dev.write.rate[{#DEVNAME}]) > 0)'
+              description: 'This formula contains two Boolean expressions that evaluate to 1 or 0 in order to set the calculated metric to zero and to avoid the exception - division by zero.'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: disk
+                  value: '{#DEVNAME}'
+            - uuid: 7f490ad6d8974ba4a08d91b599557716
+              name: '{#DEVNAME}: Disk write rate'
+              type: DEPENDENT
+              key: 'vfs.dev.write.rate[{#DEVNAME}]'
+              delay: '0'
+              history: 7d
+              value_type: FLOAT
+              units: '!w/s'
+              description: 'w/s (write operations per second) - the number (after merges) of write requests completed per second for the device.'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$[4]'
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              master_item:
+                key: 'vfs.file.contents[/sys/block/{#DEVNAME}/stat]'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: disk
+                  value: '{#DEVNAME}'
+            - uuid: f00cfa18063c4d9d90c6d5527eb96813
+              name: '{#DEVNAME}: Disk write time (rate)'
+              type: DEPENDENT
+              key: 'vfs.dev.write.time.rate[{#DEVNAME}]'
+              delay: '0'
+              history: 7d
+              value_type: FLOAT
+              description: 'The rate of total write time counter; used in `w_await` calculation.'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$[7]'
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+              master_item:
+                key: 'vfs.file.contents[/sys/block/{#DEVNAME}/stat]'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: disk
+                  value: '{#DEVNAME}'
+            - uuid: 0cba512ce86d40c18b3a2a88f4922d68
+              name: '{#DEVNAME}: Get stats'
+              key: 'vfs.file.contents[/sys/block/{#DEVNAME}/stat]'
+              history: '0'
+              value_type: TEXT
+              trends: '0'
+              description: 'The contents of get `/sys/block/{#DEVNAME}/stat` to get the disk statistics.'
+              preprocessing:
+                - type: JAVASCRIPT
+                  parameters:
+                    - 'return JSON.stringify(value.trim().split(/ +/));'
+              tags:
+                - tag: component
+                  value: raw
+          trigger_prototypes:
+            - uuid: 17389c97d5d14c079db7cec2417d743d
+              expression: 'min(/Linux by Zabbix - Security/vfs.dev.read.await[{#DEVNAME}],15m) > {$VFS.DEV.READ.AWAIT.WARN:"{#DEVNAME}"} or min(/Linux by Zabbix - Security/vfs.dev.write.await[{#DEVNAME}],15m) > {$VFS.DEV.WRITE.AWAIT.WARN:"{#DEVNAME}"}'
+              name: '{#DEVNAME}: Disk read/write request responses are too high'
+              event_name: '{#DEVNAME}: Disk read/write request responses are too high (read > {$VFS.DEV.READ.AWAIT.WARN:"{#DEVNAME}"} ms for 15m or write > {$VFS.DEV.WRITE.AWAIT.WARN:"{#DEVNAME}"} ms for 15m)'
+              priority: WARNING
+              description: 'This trigger might indicate the disk `{#DEVNAME}` saturation.'
+              manual_close: 'YES'
+              tags:
+                - tag: scope
+                  value: performance
+          graph_prototypes:
+            - uuid: 219f106b3eec42668b7017bfeda918b2
+              name: '{#DEVNAME}: Disk average waiting time'
+              graph_items:
+                - color: 199C0D
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'vfs.dev.read.await[{#DEVNAME}]'
+                - sortorder: '1'
+                  drawtype: GRADIENT_LINE
+                  color: F63100
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'vfs.dev.write.await[{#DEVNAME}]'
+            - uuid: f80846701aa34f13ae2db4bb33190d79
+              name: '{#DEVNAME}: Disk read/write rates'
+              graph_items:
+                - color: 199C0D
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'vfs.dev.read.rate[{#DEVNAME}]'
+                - sortorder: '1'
+                  drawtype: GRADIENT_LINE
+                  color: F63100
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'vfs.dev.write.rate[{#DEVNAME}]'
+            - uuid: 3843d94c944549598c1d10072e0192db
+              name: '{#DEVNAME}: Disk utilization and queue'
+              graph_items:
+                - color: 199C0D
+                  yaxisside: RIGHT
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'vfs.dev.queue_size[{#DEVNAME}]'
+                - sortorder: '1'
+                  drawtype: GRADIENT_LINE
+                  color: F63100
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'vfs.dev.util[{#DEVNAME}]'
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1h
+        - uuid: 946f61e7d7a74f39b088b060da064f13
+          name: 'Mounted filesystem discovery'
+          type: DEPENDENT
+          key: vfs.fs.dependent.discovery
+          delay: '0'
+          filter:
+            evaltype: AND
+            conditions:
+              - macro: '{#FSNAME}'
+                value: '{$VFS.FS.FSNAME.MATCHES}'
+                formulaid: A
+              - macro: '{#FSNAME}'
+                value: '{$VFS.FS.FSNAME.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: B
+              - macro: '{#FSTYPE}'
+                value: '{$VFS.FS.FSTYPE.MATCHES}'
+                formulaid: C
+              - macro: '{#FSTYPE}'
+                value: '{$VFS.FS.FSTYPE.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: D
+          description: 'The discovery of mounted filesystems with different types.'
+          item_prototypes:
+            - uuid: f0223e2d6458413790e837b32dbdcff6
+              name: '{#FSNAME}: Free inodes in %'
+              type: DEPENDENT
+              key: 'vfs.fs.dependent.inode[{#FSNAME},pfree]'
+              delay: '0'
+              history: 7d
+              value_type: FLOAT
+              units: '%'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - $.inodes.pfree
+              master_item:
+                key: 'vfs.fs.dependent[{#FSNAME},data]'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: filesystem
+                  value: '{#FSNAME}'
+              trigger_prototypes:
+                - uuid: d6f4f2b70f49476281f9d1bf3ceb2e40
+                  expression: 'min(/Linux by Zabbix - Security/vfs.fs.dependent.inode[{#FSNAME},pfree],5m)<{$VFS.FS.INODE.PFREE.MIN.CRIT:"{#FSNAME}"}'
+                  name: '{#FSNAME}: Running out of free inodes'
+                  event_name: '{#FSNAME}: Running out of free inodes (free < {$VFS.FS.INODE.PFREE.MIN.CRIT:"{#FSNAME}"}%)'
+                  opdata: 'Free inodes: {ITEM.LASTVALUE1}'
+                  priority: AVERAGE
+                  description: |
+                    It may become impossible to write to a disk if there are no index nodes left.
+                    The following error messages may be returned as symptoms, even though the free space is available:
+                    - 'No space left on device';
+                    - 'Disk is full'.
+                  tags:
+                    - tag: scope
+                      value: capacity
+                    - tag: scope
+                      value: performance
+                - uuid: 6e6da3ab893e46dd9efc244edb778d1b
+                  expression: 'min(/Linux by Zabbix - Security/vfs.fs.dependent.inode[{#FSNAME},pfree],5m)<{$VFS.FS.INODE.PFREE.MIN.WARN:"{#FSNAME}"}'
+                  name: '{#FSNAME}: Running out of free inodes'
+                  event_name: '{#FSNAME}: Running out of free inodes (free < {$VFS.FS.INODE.PFREE.MIN.WARN:"{#FSNAME}"}%)'
+                  opdata: 'Free inodes: {ITEM.LASTVALUE1}'
+                  priority: WARNING
+                  description: |
+                    It may become impossible to write to a disk if there are no index nodes left.
+                    The following error messages may be returned as symptoms, even though the free space is available:
+                    - 'No space left on device';
+                    - 'Disk is full'.
+                  dependencies:
+                    - name: '{#FSNAME}: Running out of free inodes'
+                      expression: 'min(/Linux by Zabbix - Security/vfs.fs.dependent.inode[{#FSNAME},pfree],5m)<{$VFS.FS.INODE.PFREE.MIN.CRIT:"{#FSNAME}"}'
+                  tags:
+                    - tag: scope
+                      value: capacity
+                    - tag: scope
+                      value: performance
+            - uuid: ab65b30a095344ec82310c557a715875
+              name: '{#FSNAME}: Space utilization'
+              type: DEPENDENT
+              key: 'vfs.fs.dependent.size[{#FSNAME},pused]'
+              delay: '0'
+              history: 7d
+              value_type: FLOAT
+              units: '%'
+              description: 'Space utilization expressed in % for `{#FSNAME}`.'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - $.bytes.pused
+              master_item:
+                key: 'vfs.fs.dependent[{#FSNAME},data]'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: filesystem
+                  value: '{#FSNAME}'
+            - uuid: a53d5ce0eb48467097de68a7366c6e8a
+              name: '{#FSNAME}: Total space'
+              type: DEPENDENT
+              key: 'vfs.fs.dependent.size[{#FSNAME},total]'
+              delay: '0'
+              history: 7d
+              units: B
+              description: 'The total space expressed in bytes.'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - $.bytes.total
+              master_item:
+                key: 'vfs.fs.dependent[{#FSNAME},data]'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: filesystem
+                  value: '{#FSNAME}'
+            - uuid: 7cb915ad7f984d28a13a8313955bd9a4
+              name: '{#FSNAME}: Used space'
+              type: DEPENDENT
+              key: 'vfs.fs.dependent.size[{#FSNAME},used]'
+              delay: '0'
+              history: 7d
+              units: B
+              description: 'Used storage expressed in bytes.'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - $.bytes.used
+              master_item:
+                key: 'vfs.fs.dependent[{#FSNAME},data]'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: filesystem
+                  value: '{#FSNAME}'
+            - uuid: 8d96397089cd4c25a0e09c20ed014a0a
+              name: '{#FSNAME}: Get filesystem data'
+              type: DEPENDENT
+              key: 'vfs.fs.dependent[{#FSNAME},data]'
+              delay: '0'
+              history: 1h
+              value_type: TEXT
+              trends: '0'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.[?(@.fsname==''{#FSNAME}'')].first()'
+              master_item:
+                key: vfs.fs.get
+              tags:
+                - tag: component
+                  value: raw
+                - tag: component
+                  value: storage
+                - tag: filesystem
+                  value: '{#FSNAME}'
+            - uuid: 90db7762f749494aab3ecc6efd068fea
+              name: '{#FSNAME}: Filesystem is read-only'
+              type: DEPENDENT
+              key: 'vfs.fs.dependent[{#FSNAME},readonly]'
+              delay: '0'
+              history: 7d
+              description: 'The filesystem is mounted as read-only. It is available only for Zabbix agents 6.4 and higher.'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - $.options
+                  error_handler: DISCARD_VALUE
+                - type: REGEX
+                  parameters:
+                    - '(?:^|,)ro\b'
+                    - '1'
+                  error_handler: CUSTOM_VALUE
+                  error_handler_params: '0'
+              master_item:
+                key: 'vfs.fs.dependent[{#FSNAME},data]'
+              tags:
+                - tag: component
+                  value: storage
+                - tag: filesystem
+                  value: '{#FSNAME}'
+              trigger_prototypes:
+                - uuid: f32c25bc66704481b258c1ad1716d720
+                  expression: 'last(/Linux by Zabbix - Security/vfs.fs.dependent[{#FSNAME},readonly],#2)=0 and last(/Linux by Zabbix - Security/vfs.fs.dependent[{#FSNAME},readonly])=1'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Linux by Zabbix - Security/vfs.fs.dependent[{#FSNAME},readonly])=0'
+                  name: '{#FSNAME}: Filesystem has become read-only'
+                  priority: AVERAGE
+                  description: 'The filesystem has become read-only. A possible reason is an I/O error. It is available only for Zabbix agents 6.4 and higher.'
+                  manual_close: 'YES'
+                  tags:
+                    - tag: scope
+                      value: availability
+                    - tag: scope
+                      value: performance
+          trigger_prototypes:
+            - uuid: 9cc4fadd71a049248e3b5c07cc34e3c2
+              expression: |
+                last(/Linux by Zabbix - Security/vfs.fs.dependent.size[{#FSNAME},pused])>{$VFS.FS.PUSED.MAX.CRIT:"{#FSNAME}"} and
+                ((last(/Linux by Zabbix - Security/vfs.fs.dependent.size[{#FSNAME},total])-last(/Linux by Zabbix - Security/vfs.fs.dependent.size[{#FSNAME},used]))<{$VFS.FS.FREE.MIN.CRIT:"{#FSNAME}"} or timeleft(/Linux by Zabbix - Security/vfs.fs.dependent.size[{#FSNAME},pused],1h,100)<1d)
+              name: '{#FSNAME}: Disk space is critically low'
+              event_name: '{#FSNAME}: Disk space is critically low (used > {$VFS.FS.PUSED.MAX.CRIT:"{#FSNAME}"}%)'
+              opdata: 'Space used: {ITEM.LASTVALUE3} of {ITEM.LASTVALUE2} ({ITEM.LASTVALUE1})'
+              priority: AVERAGE
+              description: |
+                Two conditions should match:
+                1. The first condition - utilization of the space should be above `{$VFS.FS.PUSED.MAX.CRIT:"{#FSNAME}"}`.
+                2. The second condition should be one of the following:
+                - the disk free space is less than `{$VFS.FS.FREE.MIN.CRIT:"{#FSNAME}"}`;
+                - the disk will be full in less than 24 hours.
+              manual_close: 'YES'
+              tags:
+                - tag: scope
+                  value: availability
+                - tag: scope
+                  value: capacity
+            - uuid: 7d1a6bd2b3ce4940b661a69e0969f1f0
+              expression: |
+                last(/Linux by Zabbix - Security/vfs.fs.dependent.size[{#FSNAME},pused])>{$VFS.FS.PUSED.MAX.WARN:"{#FSNAME}"} and
+                ((last(/Linux by Zabbix - Security/vfs.fs.dependent.size[{#FSNAME},total])-last(/Linux by Zabbix - Security/vfs.fs.dependent.size[{#FSNAME},used]))<{$VFS.FS.FREE.MIN.WARN:"{#FSNAME}"} or timeleft(/Linux by Zabbix - Security/vfs.fs.dependent.size[{#FSNAME},pused],1h,100)<1d)
+              name: '{#FSNAME}: Disk space is low'
+              event_name: '{#FSNAME}: Disk space is low (used > {$VFS.FS.PUSED.MAX.WARN:"{#FSNAME}"}%)'
+              opdata: 'Space used: {ITEM.LASTVALUE3} of {ITEM.LASTVALUE2} ({ITEM.LASTVALUE1})'
+              priority: WARNING
+              description: |
+                Two conditions should match:
+                1. The first condition - utilization of the space should be above `{$VFS.FS.PUSED.MAX.WARN:"{#FSNAME}"}`.
+                2. The second condition should be one of the following:
+                - the disk free space is less than `{$VFS.FS.FREE.MIN.WARN:"{#FSNAME}"}`;
+                - the disk will be full in less than 24 hours.
+              manual_close: 'YES'
+              dependencies:
+                - name: '{#FSNAME}: Disk space is critically low'
+                  expression: |
+                    last(/Linux by Zabbix - Security/vfs.fs.dependent.size[{#FSNAME},pused])>{$VFS.FS.PUSED.MAX.CRIT:"{#FSNAME}"} and
+                    ((last(/Linux by Zabbix - Security/vfs.fs.dependent.size[{#FSNAME},total])-last(/Linux by Zabbix - Security/vfs.fs.dependent.size[{#FSNAME},used]))<{$VFS.FS.FREE.MIN.CRIT:"{#FSNAME}"} or timeleft(/Linux by Zabbix - Security/vfs.fs.dependent.size[{#FSNAME},pused],1h,100)<1d)
+              tags:
+                - tag: scope
+                  value: availability
+                - tag: scope
+                  value: capacity
+          graph_prototypes:
+            - uuid: 6827875c8ca541d2ad600bd988e9cde2
+              name: '{#FSNAME}: Disk space usage'
+              width: '600'
+              height: '340'
+              type: PIE
+              show_3d: 'YES'
+              graph_items:
+                - color: '969696'
+                  calc_fnc: LAST
+                  type: GRAPH_SUM
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'vfs.fs.dependent.size[{#FSNAME},total]'
+                - sortorder: '1'
+                  color: C80000
+                  calc_fnc: LAST
+                  item:
+                    host: 'Linux by Zabbix - Security'
+                    key: 'vfs.fs.dependent.size[{#FSNAME},used]'
+          master_item:
+            key: vfs.fs.get
+          lld_macro_paths:
+            - lld_macro: '{#FSNAME}'
+              path: $.fsname
+            - lld_macro: '{#FSTYPE}'
+              path: $.fstype
+          overrides:
+            - name: 'Skip metadata collection for dynamic FS'
+              step: '1'
+              filter:
+                conditions:
+                  - macro: '{#FSTYPE}'
+                    value: ^(btrfs|zfs)$
+                    formulaid: A
+              operations:
+                - operationobject: ITEM_PROTOTYPE
+                  operator: LIKE
+                  value: inode
+                  discover: NO_DISCOVER
+      tags:
+        - tag: class
+          value: os
+        - tag: target
+          value: linux
+      macros:
+        - macro: '{$AGENT.TIMEOUT}'
+          value: 3m
+          description: 'Timeout after which agent is considered unavailable. Works only for agents reachable from Zabbix server/proxy (passive mode).'
+        - macro: '{$CPU.UTIL.CRIT}'
+          value: '90'
+        - macro: '{$IF.ERRORS.WARN}'
+          value: '2'
+        - macro: '{$IF.UTIL.MAX}'
+          value: '90'
+          description: 'This macro is used as a threshold in the interface utilization trigger.'
+        - macro: '{$IFCONTROL}'
+          value: '1'
+        - macro: '{$KERNEL.MAXFILES.MIN}'
+          value: '256'
+        - macro: '{$KERNEL.MAXPROC.MIN}'
+          value: '1024'
+        - macro: '{$LOAD_AVG_PER_CPU.MAX.WARN}'
+          value: '1.5'
+          description: 'The CPU load per core is considered sustainable. If necessary, it can be tuned.'
+        - macro: '{$MEMORY.AVAILABLE.MIN}'
+          value: 20M
+          description: 'This macro is used as a threshold in the memory available trigger.'
+        - macro: '{$MEMORY.UTIL.MAX}'
+          value: '90'
+          description: 'This macro is used as a threshold in the memory utilization trigger.'
+        - macro: '{$NET.IF.IFNAME.MATCHES}'
+          value: '^.*$'
+        - macro: '{$NET.IF.IFNAME.NOT_MATCHES}'
+          value: '(^Software Loopback Interface|^NULL[0-9.]*$|^[Ll]o[0-9.]*$|^[Ss]ystem$|^Nu[0-9.]*$|^veth[0-9A-z]+$|docker[0-9]+|br-[a-z0-9]{12})'
+          description: 'It filters out `loopbacks`, `nulls`, `docker veth` links and `docker0 bridge` by default.'
+        - macro: '{$SWAP.PFREE.MIN.WARN}'
+          value: '50'
+        - macro: '{$SYSTEM.FUZZYTIME.MAX}'
+          value: '60'
+        - macro: '{$VFS.DEV.DEVNAME.MATCHES}'
+          value: .+
+          description: 'This macro is used for a discovery of block devices. It can be overridden on host level or its linked template level.'
+        - macro: '{$VFS.DEV.DEVNAME.NOT_MATCHES}'
+          value: '^(loop[0-9]*|sd[a-z][0-9]+|nbd[0-9]+|sr[0-9]+|fd[0-9]+|dm-[0-9]+|ram[0-9]+|ploop[a-z0-9]+|md[0-9]*|hcp[0-9]*|zram[0-9]*)'
+          description: 'This macro is used for a discovery of block devices. It can be overridden on host level or its linked template level.'
+        - macro: '{$VFS.DEV.READ.AWAIT.WARN}'
+          value: '20'
+          description: 'The average response time (in ms) of disk read before the trigger would fire.'
+        - macro: '{$VFS.DEV.WRITE.AWAIT.WARN}'
+          value: '20'
+          description: 'The average response time (in ms) of disk write before the trigger would fire.'
+        - macro: '{$VFS.FS.FREE.MIN.CRIT}'
+          value: 5G
+          description: 'The critical threshold for utilization of the filesystem.'
+        - macro: '{$VFS.FS.FREE.MIN.WARN}'
+          value: 10G
+          description: 'The warning threshold for utilization of the filesystem.'
+        - macro: '{$VFS.FS.FSNAME.MATCHES}'
+          value: .+
+          description: 'This macro is used for discovery of the filesystems. It can be overridden on host level or its linked template level.'
+        - macro: '{$VFS.FS.FSNAME.NOT_MATCHES}'
+          value: ^(/dev|/sys|/run|/proc|.+/shm$)
+          description: 'This macro is used for discovery of the filesystems. It can be overridden on host level or its linked template level.'
+        - macro: '{$VFS.FS.FSTYPE.MATCHES}'
+          value: ^(btrfs|ext2|ext3|ext4|reiser|xfs|ffs|ufs|jfs|jfs2|vxfs|hfs|apfs|refs|ntfs|fat32|zfs)$
+          description: 'This macro is used for discovery of the filesystems. It can be overridden on host level or its linked template level.'
+        - macro: '{$VFS.FS.FSTYPE.NOT_MATCHES}'
+          value: ^\s$
+          description: 'This macro is used for discovery of the filesystems. It can be overridden on host level or its linked template level.'
+        - macro: '{$VFS.FS.INODE.PFREE.MIN.CRIT}'
+          value: '10'
+          description: 'The critical threshold of the filesystem metadata utilization.'
+        - macro: '{$VFS.FS.INODE.PFREE.MIN.WARN}'
+          value: '20'
+          description: 'The warning threshold of the filesystem metadata utilization.'
+        - macro: '{$VFS.FS.PUSED.MAX.CRIT}'
+          value: '90'
+          description: 'The critical threshold of the filesystem utilization.'
+        - macro: '{$VFS.FS.PUSED.MAX.WARN}'
+          value: '80'
+          description: 'The warning threshold of the filesystem utilization.'
+      dashboards:
+        - uuid: de0e3cd8f2154214a0b5d0510696af19
+          name: 'Network interfaces'
+          pages:
+            - name: Overview
+              widgets:
+                - type: graphprototype
+                  width: '24'
+                  height: '5'
+                  fields:
+                    - type: INTEGER
+                      name: columns
+                      value: '1'
+                    - type: GRAPH_PROTOTYPE
+                      name: graphid
+                      value:
+                        host: 'Linux by Zabbix - Security'
+                        name: 'Interface {#IFNAME}: Network traffic'
+        - uuid: 5ae811c04f594059a2085e909aa7d210
+          name: 'System performance'
+          pages:
+            - widgets:
+                - type: graph
+                  width: '12'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'Linux by Zabbix - Security'
+                        name: 'Linux: System load'
+                - type: graph
+                  'y': '5'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'Linux by Zabbix - Security'
+                        name: 'Linux: Memory usage'
+                - type: graphprototype
+                  'y': '10'
+                  width: '24'
+                  height: '5'
+                  fields:
+                    - type: INTEGER
+                      name: columns
+                      value: '1'
+                    - type: GRAPH_PROTOTYPE
+                      name: graphid
+                      value:
+                        host: 'Linux by Zabbix - Security'
+                        name: '{#FSNAME}: Disk space usage'
+                - type: graphprototype
+                  'y': '15'
+                  width: '24'
+                  height: '5'
+                  fields:
+                    - type: INTEGER
+                      name: columns
+                      value: '1'
+                    - type: GRAPH_PROTOTYPE
+                      name: graphid
+                      value:
+                        host: 'Linux by Zabbix - Security'
+                        name: '{#DEVNAME}: Disk read/write rates'
+                - type: graphprototype
+                  'y': '20'
+                  width: '24'
+                  height: '5'
+                  fields:
+                    - type: INTEGER
+                      name: columns
+                      value: '1'
+                    - type: GRAPH_PROTOTYPE
+                      name: graphid
+                      value:
+                        host: 'Linux by Zabbix - Security'
+                        name: '{#DEVNAME}: Disk average waiting time'
+                - type: graphprototype
+                  'y': '25'
+                  width: '24'
+                  height: '5'
+                  fields:
+                    - type: INTEGER
+                      name: columns
+                      value: '1'
+                    - type: GRAPH_PROTOTYPE
+                      name: graphid
+                      value:
+                        host: 'Linux by Zabbix - Security'
+                        name: '{#DEVNAME}: Disk utilization and queue'
+                - type: graphprototype
+                  'y': '30'
+                  width: '24'
+                  height: '5'
+                  fields:
+                    - type: INTEGER
+                      name: columns
+                      value: '1'
+                    - type: GRAPH_PROTOTYPE
+                      name: graphid
+                      value:
+                        host: 'Linux by Zabbix - Security'
+                        name: 'Interface {#IFNAME}: Network traffic'
+                - type: graph
+                  x: '12'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'Linux by Zabbix - Security'
+                        name: 'Linux: CPU usage'
+                - type: graph
+                  x: '12'
+                  'y': '5'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'Linux by Zabbix - Security'
+                        name: 'Linux: Swap usage'
+      valuemaps:
+        - uuid: 444ccf5740d94b0b9e24b17ff441d074
+          name: ifOperStatus
+          mappings:
+            - value: '0'
+              newvalue: unknown
+            - value: '1'
+              newvalue: notpresent
+            - value: '2'
+              newvalue: down
+            - value: '3'
+              newvalue: lowerlayerdown
+            - value: '4'
+              newvalue: testing
+            - value: '5'
+              newvalue: dormant
+            - value: '6'
+              newvalue: up
+        - uuid: 01539dd653ab412d87602435b778e51c
+          name: 'Linux::Interface protocol types'
+          mappings:
+            - value: '0'
+              newvalue: 'from KA9Q: NET/ROM pseudo'
+            - value: '1'
+              newvalue: Ethernet
+            - value: '2'
+              newvalue: 'Experimental Ethernet'
+            - value: '3'
+              newvalue: 'AX.25 Level 2'
+            - value: '4'
+              newvalue: 'PROnet token ring'
+            - value: '5'
+              newvalue: Chaosnet
+            - value: '6'
+              newvalue: 'IEEE 802.2 Ethernet/TR/TB'
+            - value: '7'
+              newvalue: ARCnet
+            - value: '8'
+              newvalue: APPLEtalk
+            - value: '15'
+              newvalue: 'Frame Relay DLCI'
+            - value: '19'
+              newvalue: ATM
+            - value: '23'
+              newvalue: 'Metricom STRIP (new IANA id)'
+            - value: '24'
+              newvalue: 'IEEE 1394 IPv4 - RFC 2734'
+            - value: '27'
+              newvalue: EUI-64
+            - value: '32'
+              newvalue: InfiniBand
+            - value: '256'
+              newvalue: ARPHRD_SLIP
+            - value: '257'
+              newvalue: ARPHRD_CSLIP
+            - value: '258'
+              newvalue: ARPHRD_SLIP6
+            - value: '259'
+              newvalue: ARPHRD_CSLIP6
+            - value: '260'
+              newvalue: 'Notional KISS type'
+            - value: '264'
+              newvalue: ARPHRD_ADAPT
+            - value: '270'
+              newvalue: ARPHRD_ROSE
+            - value: '271'
+              newvalue: 'CCITT X.25'
+            - value: '272'
+              newvalue: 'Boards with X.25 in firmware'
+            - value: '280'
+              newvalue: 'Controller Area Network'
+            - value: '512'
+              newvalue: ARPHRD_PPP
+            - value: '513'
+              newvalue: 'Cisco HDLC'
+            - value: '516'
+              newvalue: LAPB
+            - value: '517'
+              newvalue: 'Digital''s DDCMP protocol'
+            - value: '518'
+              newvalue: 'Raw HDLC'
+            - value: '519'
+              newvalue: 'Raw IP'
+            - value: '768'
+              newvalue: 'IPIP tunnel'
+            - value: '769'
+              newvalue: 'IP6IP6 tunnel'
+            - value: '770'
+              newvalue: 'Frame Relay Access Device'
+            - value: '771'
+              newvalue: 'SKIP vif'
+            - value: '772'
+              newvalue: 'Loopback device'
+            - value: '773'
+              newvalue: 'Localtalk device'
+            - value: '774'
+              newvalue: 'Fiber Distributed Data Interface'
+            - value: '775'
+              newvalue: 'AP1000 BIF'
+            - value: '776'
+              newvalue: 'sit0 device - IPv6-in-IPv4'
+            - value: '777'
+              newvalue: 'IP over DDP tunneller'
+            - value: '778'
+              newvalue: 'GRE over IP'
+            - value: '779'
+              newvalue: 'PIMSM register interface'
+            - value: '780'
+              newvalue: 'High Performance Parallel Interface'
+            - value: '781'
+              newvalue: 'Nexus 64Mbps Ash'
+            - value: '782'
+              newvalue: 'Acorn Econet'
+            - value: '783'
+              newvalue: Linux-IrDA
+            - value: '784'
+              newvalue: 'Point to point fibrechannel'
+            - value: '785'
+              newvalue: 'Fibrechannel arbitrated loop'
+            - value: '786'
+              newvalue: 'Fibrechannel public loop'
+            - value: '787'
+              newvalue: 'Fibrechannel fabric'
+            - value: '800'
+              newvalue: 'Magic type ident for TR'
+            - value: '801'
+              newvalue: 'IEEE 802.11'
+            - value: '802'
+              newvalue: 'IEEE 802.11 + Prism2 header'
+            - value: '803'
+              newvalue: 'IEEE 802.11 + radiotap header'
+            - value: '804'
+              newvalue: ARPHRD_IEEE802154
+            - value: '805'
+              newvalue: 'IEEE 802.15.4 network monitor'
+            - value: '820'
+              newvalue: 'PhoNet media type'
+            - value: '821'
+              newvalue: 'PhoNet pipe header'
+            - value: '822'
+              newvalue: 'CAIF media type'
+            - value: '823'
+              newvalue: 'GRE over IPv6'
+            - value: '824'
+              newvalue: 'Netlink header'
+            - value: '825'
+              newvalue: 'IPv6 over LoWPAN'
+            - value: '826'
+              newvalue: 'Vsock monitor header'
+        - uuid: de50bd6c5c73427aa8d3d3071feee213
+          name: zabbix.host.available
+          mappings:
+            - value: '0'
+              newvalue: 'not available'
+            - value: '1'
+              newvalue: available
+            - value: '2'
+              newvalue: unknown
+        - uuid: 3f9f16ee539d431c87354f21ca7dd473
+          name: 'Zabbix agent ping status'
+          mappings:
+            - value: '1'
+              newvalue: Up
+  triggers:
+    - uuid: 9f35c0259254463b9f34f95fe539de54
+      expression: 'last(/Linux by Zabbix - Security/proc.num)/last(/Linux by Zabbix - Security/kernel.maxproc)*100>80'
+      name: 'Linux: Getting closer to process limit'
+      event_name: 'Linux: Getting closer to process limit (over 80% used)'
+      opdata: '{ITEM.LASTVALUE1} active, {ITEM.LASTVALUE2} limit.'
+      priority: WARNING
+      tags:
+        - tag: scope
+          value: performance
+    - uuid: 68465059ef3143bdb7dc0892030f9b04
+      expression: 'max(/Linux by Zabbix - Security/system.swap.size[,pfree],5m)<{$SWAP.PFREE.MIN.WARN} and last(/Linux by Zabbix - Security/system.swap.size[,total])>0'
+      name: 'Linux: High swap space usage'
+      event_name: 'Linux: High swap space usage (less than {$SWAP.PFREE.MIN.WARN}% free)'
+      opdata: 'Free: {ITEM.LASTVALUE1}, total: {ITEM.LASTVALUE2}'
+      priority: WARNING
+      description: 'If there is no swap configured, this trigger is ignored.'
+      dependencies:
+        - name: 'Linux: High memory utilization'
+          expression: 'min(/Linux by Zabbix - Security/vm.memory.utilization,5m)>{$MEMORY.UTIL.MAX}'
+        - name: 'Linux: Lack of available memory'
+          expression: 'max(/Linux by Zabbix - Security/vm.memory.size[available],5m)<{$MEMORY.AVAILABLE.MIN} and last(/Linux by Zabbix - Security/vm.memory.size[total])>0'
+      tags:
+        - tag: scope
+          value: capacity
+    - uuid: 602a1756a6f544759d9188742be6278a
+      expression: 'max(/Linux by Zabbix - Security/vm.memory.size[available],5m)<{$MEMORY.AVAILABLE.MIN} and last(/Linux by Zabbix - Security/vm.memory.size[total])>0'
+      name: 'Linux: Lack of available memory'
+      event_name: 'Linux: Lack of available memory (<{$MEMORY.AVAILABLE.MIN} of {ITEM.VALUE2})'
+      opdata: 'Available: {ITEM.LASTVALUE1}, total: {ITEM.LASTVALUE2}'
+      priority: AVERAGE
+      tags:
+        - tag: scope
+          value: capacity
+        - tag: scope
+          value: performance
+    - uuid: 07ee4d81d86b47edb39f4186ca245287
+      expression: |
+        min(/Linux by Zabbix - Security/system.cpu.load[all,avg1],5m)/last(/Linux by Zabbix - Security/system.cpu.num)>{$LOAD_AVG_PER_CPU.MAX.WARN}
+        and last(/Linux by Zabbix - Security/system.cpu.load[all,avg5])>0
+        and last(/Linux by Zabbix - Security/system.cpu.load[all,avg15])>0
+      name: 'Linux: Load average is too high'
+      event_name: 'Linux: Load average is too high (per CPU load over {$LOAD_AVG_PER_CPU.MAX.WARN} for 5m)'
+      opdata: 'Load averages(1m 5m 15m): ({ITEM.LASTVALUE1} {ITEM.LASTVALUE3} {ITEM.LASTVALUE4}), # of CPUs: {ITEM.LASTVALUE2}'
+      priority: AVERAGE
+      description: 'The load average per CPU is too high. The system may be slow to respond.'
+      tags:
+        - tag: scope
+          value: capacity
+        - tag: scope
+          value: performance
+  graphs:
+    - uuid: cf086d3b4d244ff19a82f748ce54665b
+      name: 'Linux: CPU jumps'
+      graph_items:
+        - color: 199C0D
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: system.cpu.switches
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: system.cpu.intr
+    - uuid: 980b7b3cd1e54357afe3224316054266
+      name: 'Linux: CPU usage'
+      type: STACKED
+      ymin_type_1: FIXED
+      ymax_type_1: FIXED
+      graph_items:
+        - color: 199C0D
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.cpu.util[,system]'
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.cpu.util[,user]'
+        - sortorder: '2'
+          color: 00611C
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.cpu.util[,nice]'
+        - sortorder: '3'
+          color: F7941D
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.cpu.util[,iowait]'
+        - sortorder: '4'
+          color: FC6EA3
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.cpu.util[,steal]'
+        - sortorder: '5'
+          color: 6C59DC
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.cpu.util[,interrupt]'
+        - sortorder: '6'
+          color: C7A72D
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.cpu.util[,softirq]'
+        - sortorder: '7'
+          color: BA2A5D
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.cpu.util[,guest]'
+        - sortorder: '8'
+          color: F230E0
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.cpu.util[,guest_nice]'
+    - uuid: bbe221ef9ef5411ba07b0a93500d7949
+      name: 'Linux: CPU utilization'
+      ymin_type_1: FIXED
+      ymax_type_1: FIXED
+      graph_items:
+        - drawtype: GRADIENT_LINE
+          color: 199C0D
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: system.cpu.util
+    - uuid: 978f4e607bd94a8fb0fcc8d75505db59
+      name: 'Linux: Memory usage'
+      ymin_type_1: FIXED
+      graph_items:
+        - drawtype: BOLD_LINE
+          color: 199C0D
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'vm.memory.size[total]'
+        - sortorder: '1'
+          drawtype: GRADIENT_LINE
+          color: F63100
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'vm.memory.size[available]'
+    - uuid: b2b1f11ebb8541f1aa37f2778e8952ce
+      name: 'Linux: Memory utilization'
+      ymin_type_1: FIXED
+      ymax_type_1: FIXED
+      graph_items:
+        - drawtype: GRADIENT_LINE
+          color: 199C0D
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: vm.memory.utilization
+    - uuid: bb62833d52914781abfd747e90b2af42
+      name: 'Linux: Processes'
+      graph_items:
+        - color: 199C0D
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: proc.num
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'proc.num[,,run]'
+    - uuid: 7ff1137d70914f86bd4ed8c2802112de
+      name: 'Linux: Swap usage'
+      graph_items:
+        - color: 199C0D
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.swap.size[,free]'
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.swap.size[,total]'
+    - uuid: 839ed52325914983ae1a4d2df575d825
+      name: 'Linux: System load'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 199C0D
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.cpu.load[all,avg1]'
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.cpu.load[all,avg5]'
+        - sortorder: '2'
+          color: 00611C
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: 'system.cpu.load[all,avg15]'
+        - sortorder: '3'
+          color: F7941D
+          yaxisside: RIGHT
+          item:
+            host: 'Linux by Zabbix - Security'
+            key: system.cpu.num

@@ -1,0 +1,19 @@
+---
+- name: Corrupt the content of a file
+  hosts: '{{ survey_hosts }}'
+  become: yes
+
+  tasks:
+    - name: Recursively remove directory
+      ansible.builtin.file:
+        path: '{{ file_path }}'
+        state: absent
+      
+    - name: Get file status
+      ansible.builtin.stat: 
+        path: '{{ file_path }}'
+      register: file_status
+
+    - name: Print file status
+      ansible.builtin.debug:
+        var: file_status

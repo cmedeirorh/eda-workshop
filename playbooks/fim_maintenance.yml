@@ -1,0 +1,15 @@
+---
+- name: Set FIM into maintenance
+  hosts: '{{ ansible_eda.event.payload.event.hostname }}'
+  become: yes
+ 
+  tasks:
+  - name: Start/Stop FIM process
+    ansible.builtin.systemd:
+      name: fim
+      state: '{{ required_state }}'
+
+  - name: Pause for service to sync
+    ansible.builtin.pause:
+      seconds: 10
+      

@@ -1,0 +1,10 @@
+---
+- name: Corrupt the content of a file
+  hosts: '{{ survey_hosts }}'
+  become: yes
+
+  tasks:
+    - name: Copy file content
+      ansible.builtin.copy: 
+        src: ../../files/corrupted
+        dest: '{{ file_path }}'

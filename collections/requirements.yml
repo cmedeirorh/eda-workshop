@@ -1,0 +1,9 @@
+---
+collections:
+  - community.general
+  - ansible.eda
+  - community.vmware
+  - vmware.vmware_rest
+  - awx.awx
+  - containers.podman
+  - devsec.hardening

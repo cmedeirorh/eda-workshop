@@ -1,0 +1,31 @@
+{{ ansible_managed | comment }}
+node: "FIM"
+events:
+  destination: both
+  file: /var/lib/fim/events.json
+  endpoint:
+    address: {{ eda_webhook }}
+    insecure: true
+    credentials:
+      user: eda-user
+      token: 4TuMLQkyxD8Q7onfIq1NLi2kQz2XF
+monitor:
+  - path: /etc/fim/config.yml
+    labels: ["fim"]
+  - path: /etc/modprobe.d/dev-sec.conf
+    labels: ["devsec"]
+  - path: /etc/audit/auditd.conf
+    labels: ["devsec"]    
+  - path: /etc/security/limits.d/10.hardcore.conf
+    labels: ["devsec"]  
+  - path: /etc/systemd/coredump.conf.d/custom.conf
+    labels: ["devsec"]
+  - path: /etc/pam.d/system-auth
+    labels: ["devsec"]
+  - path: /etc/pam.d/password-auth-local
+    labels: ["devsec"]
+  - path: /etc/pam.d/password-auth
+    labels: ["devsec"]
+log:
+  file: /var/log/fim/fim.log
+  level: info

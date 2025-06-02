@@ -7,4 +7,3 @@ collections:
   - awx.awx
   - containers.podman
   - devsec.hardening
-  - vmware.vmware_rest

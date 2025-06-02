@@ -10,7 +10,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       name: node2-rhel9
-      folder: "{{ folder }}
+      folder: "{{ folder }}"
       disk:
         - size_gb: 10
           type: thin

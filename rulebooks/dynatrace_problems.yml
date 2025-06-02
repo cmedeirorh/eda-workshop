@@ -10,7 +10,7 @@
     - name: Dynatrace Problem Alerts
       condition: event.payload.State == "OPEN"  
         run_job_template:
-          name: "{{ job_template }}"
+          name: "{{ template }}"
           organization: Default
           job_args:
             extra_vars:

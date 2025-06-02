@@ -7,7 +7,6 @@
   - name: Get VM id
     vmware.vmware_rest.vcenter_vm_info:
     register: search_result
-    vmware.vmware_rest.vcenter_vm_info:
       filter_names:
       - '{{ composed_var }}'
       

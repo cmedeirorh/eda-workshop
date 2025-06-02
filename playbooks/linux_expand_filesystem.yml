@@ -7,9 +7,10 @@
   - name: Get VM id
     vmware.vmware_rest.vcenter_vm_info:
     register: search_result
-      filter_names:
-      - '{{ composed_var }}'
+      names: "node2-rhel9"
       
   - name: print
     ansible.builtin.debug:
       var: search_result
+
+

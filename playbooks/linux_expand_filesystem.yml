@@ -6,7 +6,7 @@
   tasks:
   - name: Add disk to VM on VMware
     community.vmware.vmware_guest_disk:
-      name: '{{ config.name }}'
+      name: '{{ composed_var }}'
       datacenter: "{{ datacenter }}"
       folder: "{{ folder }}"
       hostname: '{{ hostname }}'

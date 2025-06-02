@@ -1,0 +1,15 @@
+---
+- name: Respond to Dynatrace
+  hosts: all
+  sources:
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 35002
+
+  rules:
+    - name: Dynatrace Problem Alerts
+      condition: event.payload.State == "OPEN"  
+      action:
+        debug:
+          var: event.payload
+          

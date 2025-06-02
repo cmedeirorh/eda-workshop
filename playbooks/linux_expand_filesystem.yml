@@ -1,0 +1,10 @@
+---
+- name: Linux - Expand Filesystem when full
+  hosts: '{{ ansible_eda.event.payload.EntityName }}'
+  become: yes
+
+  tasks:
+  - name: Remove file
+    ansible.builtin.file:
+      path: /home/cloud-user/test
+      state: absent

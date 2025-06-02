@@ -9,7 +9,7 @@
       name: '{{ composed_var }}'
       datacenter: "{{ datacenter }}"
       folder: "{{ folder }}"
-      hostname: '{{ hostname }}'
+      hostname: '{{ host }}'
       username: '{{ username }}'
       password: '{{ password }}'
       

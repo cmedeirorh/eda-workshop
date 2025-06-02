@@ -12,7 +12,6 @@
       name: node2-rhel9
       folder: "{{ folder }}
       disk:
-        size_gb: 10
-        type: thin
-        state: present
-        #datastore: "{{ datastore_name }}"
+        - size_gb: 10
+          type: thin
+          state: present

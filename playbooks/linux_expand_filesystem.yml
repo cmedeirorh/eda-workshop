@@ -2,6 +2,7 @@
 - name: Linux - Expand Filesystem when full
   hosts: '{{ EntityName }}'
   become: yes
+  delegate_to: localhost
 
   tasks:
   - name: Add disk to VM on VMware

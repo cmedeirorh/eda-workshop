@@ -12,4 +12,5 @@
       disk:
         - size_gb: 10
           type: thin
+          unit_number: 1
           state: present

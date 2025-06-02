@@ -8,7 +8,10 @@
     community.vmware.vmware_guest_disk:
       name: '{{ composed_var }}'
       datacenter: "{{ datacenter }}"
-      folder: "{{ folder }}"  
+      folder: "{{ folder }}"
+      hostname: '{{ hostname }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
       disk:
         - size_gb: 10
           type: thin

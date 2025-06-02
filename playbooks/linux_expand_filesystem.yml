@@ -4,7 +4,15 @@
   become: yes
 
   tasks:
-  - name: Remove file
-    ansible.builtin.file:
-      path: /home/cloud-user/test
-      state: absent
+  - name: Add disk to VM on VMware
+    community.vmware.vmware_guest_disk:
+      validate_certs: False
+      hostname: "{{ composed_var }}"
+      datacenter: "{{ datacenter }}"
+      folder: "{{ folder }}"
+      disk:
+        - size_gb: 10
+          type: thin
+          state: present
+          scsi_controller: 1
+          unit_number: 1     

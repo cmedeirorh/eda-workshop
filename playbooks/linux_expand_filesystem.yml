@@ -9,7 +9,10 @@
       name: node2-rhel9
       datacenter: "{{ datacenter }}"
       folder: "{{ folder }}"
-      hostname: '{{ host }}'
+      hostname: '{{ hostname }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      
       disk:
         - size_gb: 10
           type: thin

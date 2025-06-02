@@ -4,13 +4,15 @@
   become: yes
 
   tasks:
-  - name: Get VM id
-    vmware.vmware_rest.vcenter_vm_info:
-    register: search_result
-      names: "node2-rhel9"
-      
-  - name: print
-    ansible.builtin.debug:
-      var: search_result
-
-
+  - name: Add disk to VM on VMware
+    community.vmware.vmware_guest_disk:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: node2-rhel9
+      folder: "{{ folder }}
+      disk:
+        size_gb: 10
+        type: thin
+        state: present
+        #datastore: "{{ datastore_name }}"

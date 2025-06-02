@@ -1,6 +1,6 @@
 ---
 - name: Linux - Expand Filesystem when full
-  hosts: '{{ ansible_eda.event.payload.EntityName }}'
+  hosts: '{{ EntityName }}'
   become: yes
 
   tasks:

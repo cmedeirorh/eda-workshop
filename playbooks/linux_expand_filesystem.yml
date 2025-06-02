@@ -8,6 +8,7 @@
     community.vmware.vmware_guest_disk:
       validate_certs: False
       hostname: "{{ composed_var }}"
+      name: "{{ composed_var }}"
       datacenter: "{{ datacenter }}"
       folder: "{{ folder }}"
       disk:

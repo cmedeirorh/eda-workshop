@@ -1,5 +1,5 @@
 ---
-- name: Respond to Zabbix Events
+- name: Listen to Events
   hosts: all
   sources:
     - ansible.eda.webhook:
@@ -7,7 +7,7 @@
         port: 35002
 
   rules:
-    - name: Catch all remaining
+    - name: Print Payload
       condition: event.payload is defined
       action:
         debug:

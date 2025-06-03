@@ -7,19 +7,14 @@
         port: 35002
 
   rules:
-    - name: Print Payload
-      condition: event.payload is defined
-      action:
-        debug:
-          var: event.payload
-          
     - name: Dynatrace Problem Alerts
-      condition: event.payload.State == "OPEN"
+      condition: ((event.payload.State == "OPEN") and (event.payload.ProblemTitle == "Http monitor outage"))
       action:
         run_job_template:
           name: "{{ template }}"
           organization: Default
           job_args:
+            limit: "{{ event.payload.EntityName }}"
             extra_vars:
-              _hosts: "{{ event.payload }}"
+              url: "{{ event.payload.EntityName }}"
           

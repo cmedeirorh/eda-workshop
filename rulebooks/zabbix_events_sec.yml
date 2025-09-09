@@ -7,11 +7,11 @@
         port: 35001
 
   rules:
-    - name: Zabbix Alert - SELinux Change
-      condition: event.payload.trigger_name is match('Security Alert DevSec',ignorecase=true)
+    - name: Zabbix Alert - Web Monitoring
+      condition: event.payload.trigger_name is match('URL Checker')
       action:
         run_job_template:
-          name: "LINUX Workshop - OS Hardening"
+          name: "Demo Job Template"
           organization: Default
           job_args:
             extra_vars:

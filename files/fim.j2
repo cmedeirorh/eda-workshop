@@ -4,11 +4,11 @@ events:
   destination: both
   file: /var/lib/fim/events.json
   endpoint:
-    address: {{ eda_webhook }}
+    address: {{ eda_event_streams_url }}
     insecure: true
     credentials:
       user: eda-user
-      token: 4TuMLQkyxD8Q7onfIq1NLi2kQz2XF
+      token: {{ eda_event_streams_token }}
 monitor:
   - path: /etc/fim/config.yml
     labels: ["fim"]

@@ -38,7 +38,7 @@
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_agent2.conf
       search_string: 'Hostname=Zabbix server'
-      line: 'Hostname={{ ansible_inventory }}'
+      line: 'Hostname={{ inventory_hostname }}'
       backup: true
 
   - name: Config Zabbix Agent as root
@@ -52,7 +52,7 @@
     ansible.builtin.systemd:
       name: zabbix-agent2
       enabled: true
-      state: started
+      state: restarted
 
   - name: Enable firewald service to start on boot up
     ansible.builtin.systemd:

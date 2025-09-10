@@ -5,7 +5,7 @@
      - ansible.eda.url_check:
         urls:
           - '{{ URL }}'
-        delay: 3
+        delay: 60
 
   rules:    
     - name: Web site is DOWN

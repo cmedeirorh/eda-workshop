@@ -11,11 +11,5 @@
     - name: Web site is up
       condition: event.url_check.status == "up"
       action:
-        run_playbook:
-          name: wowza.yml
-
-    - name: Web site is down
-      condition: event.url_check.status == "down"
-      action:
-        run_playbook:
-          name: fix_web.yml
+        debug:
+          var: event.url_check

@@ -34,7 +34,7 @@
       line: 'ServerActive={{ zabbix_server }}'
       backup: true
       
-  - name: Set Active Agent
+  - name: Set Agent Hostname
     ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_agent2.conf
       search_string: 'Hostname=Zabbix server'

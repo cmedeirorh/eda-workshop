@@ -4,7 +4,7 @@
   become: yes
   vars:
     installer_url: 'https://github.com/Achiefs/fim/releases/download/v0.5.0/fim-0.5.0-1.x86_64.rpm'
-    eda_webhook: REPLACE_ME
+    eda_event_streams: REPLACE_ME
 
   tasks:
   - name: Install required packages

@@ -4,7 +4,7 @@
   sources:
      - ansible.eda.url_check:
         urls:
-          - http://'{{ URL }}'
+          - '{{ URL }}'
         delay: 3
 
   rules:

@@ -7,9 +7,16 @@
           - '{{ URL }}'
         delay: 3
 
-  rules:
-    - name: Web site is up
-      condition: event.url_check.status == "up"
+  rules:    
+    - name: Web site is DOWN
+      condition: event.url_check.status == "down"
+      action:
+        run_job_template:
+          name: "Deploy APP"
+          organization: Default
+          
+    - name: Debug
+      condition: event.url_check is defined       
       action:
         debug:
           var: event.url_check

@@ -14,7 +14,7 @@
       caller: "ansible"
       urgency: high
       impact: high
-      short_description: 'Monitoring has identified a problem on "{{ ansible_eda.event.payload.event.host_host }}"'
+      short_description: "Monitoring has identified a problem on {{ ansible_eda.event.payload.event.host_host }}"
       description: "{{ ansible_eda.event.payload }}"
     register: new_ticket
 

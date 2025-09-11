@@ -14,8 +14,7 @@
           name: "Deploy APP With Podman"
           organization: Default
           job_args:
-            extra_vars:
-              _hosts: "{{ event.payload.host_host }}"
+            limit: "{{ event.payload.host_host }}"
               
     - name: Debug
       condition: event.payload is defined       

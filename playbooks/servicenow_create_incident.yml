@@ -1,6 +1,6 @@
 ---
 - name: Create ServiceNow Incident from EDA event
-  hosts: localhost
+  hosts: "{{ ansible_eda.event.payload.event.host_host }}
   become: true
 
   tasks:      

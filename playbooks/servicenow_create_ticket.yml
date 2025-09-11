@@ -1,0 +1,24 @@
+---
+- name: Create ServiceNow Incident from EDA event
+  hosts: all
+  become: true
+
+  tasks:
+  - name: Create a ServiceNow Incident
+    servicenow.itsm.incident:
+      instance:
+          host: "{{ sn_instance }}"
+          username: "{{ sn_username }}"
+          password: "{{ sn_password }}"
+      state: new
+      caller: admin
+      short_description: "EDA Event from alert"
+      description: "payload"
+      impact: "2"
+      urgency: "2"
+    register: new_ticket
+
+  - name: ServiceNow Incident Number
+    ansible.builtin.debug:
+      var: new_ticket.record.number
+    when: new_ticket is defined

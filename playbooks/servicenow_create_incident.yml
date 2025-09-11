@@ -15,8 +15,7 @@
       urgency: high
       impact: high
       short_description: 'Monitoring has identified a problem on "{{ ansible_eda.event.payload.event.hostname }}"'
-      attachments:
-        - path: /var/lib/fim/events.json
+      description: "{{ ansible_eda.event.payload }}"
     register: new_ticket
 
   - name: ServiceNow Ticket Number

@@ -22,8 +22,10 @@
         run_job_template:
           name: "Report Incident to ServiceNow"
           organization: Default
-          extra_vars:
-            _hosts: "{{ event.payload.host_host }}"
+          job_args:
+            limit: "{{ event.payload.host_host }}"
+            extra_vars:
+              _hosts: "{{ event.payload.host_host }}"
             
     - name: Debug
       condition: event.payload is defined       

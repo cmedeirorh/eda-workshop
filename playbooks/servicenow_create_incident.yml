@@ -1,5 +1,5 @@
 ---
-- name: Check for updates on RHEL and create ServiceNow
+- name: Create ServiceNow Incident from EDA event
   hosts: '{{ ansible_eda.event.payload.event.hostname }}'
   become: true
 
@@ -14,12 +14,12 @@
       caller: "ansible"
       urgency: high
       impact: high
-      short_description: 'File Integrity Monitoring has identified modification on "{{ inventory_hostname }}"'
+      short_description: 'Monitoring has identified a problem on "{{ ansible_eda.event.payload.event.hostname }}"'
       attachments:
         - path: /var/lib/fim/events.json
     register: new_ticket
 
-  - name: ServiceNow Change Request Number
+  - name: ServiceNow Ticket Number
     ansible.builtin.debug:
       var: new_ticket.record.number
     when: new_ticket is defined

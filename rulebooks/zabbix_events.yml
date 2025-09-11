@@ -26,6 +26,7 @@
             limit: "{{ event.payload.host_host }}"
             extra_vars:
               _hosts: "{{ event.payload.host_host }}"
+              _payload: "{{ event.payload }}"
             
     - name: Debug
       condition: event.payload is defined       

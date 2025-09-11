@@ -15,7 +15,14 @@
           organization: Default
           job_args:
             limit: "{{ event.payload.host_host }}"
-              
+
+    - name: Zabbix Alert - Others
+      condition: event.payload.trigger_name is defined
+      action:
+        run_job_template:
+          name: "Report Incident to ServiceNow"
+          organization: Default
+            
     - name: Debug
       condition: event.payload is defined       
       action:

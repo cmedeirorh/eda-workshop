@@ -1,6 +1,6 @@
 ---
 - name: Create ServiceNow Incident from EDA event
-  hosts: '{{ ansible_eda.event.payload.event.hostname }}'
+  hosts: localhost
   become: true
 
   tasks:      
@@ -14,7 +14,7 @@
       caller: "ansible"
       urgency: high
       impact: high
-      short_description: 'Monitoring has identified a problem on "{{ ansible_eda.event.payload.event.hostname }}"'
+      short_description: 'Monitoring has identified a problem on "{{ ansible_eda.event.payload.event.host_host }}"'
       description: "{{ ansible_eda.event.payload }}"
     register: new_ticket
 

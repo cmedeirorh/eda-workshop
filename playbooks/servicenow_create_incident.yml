@@ -1,15 +1,12 @@
 ---
 - name: Create ServiceNow Incident from EDA event
   hosts: "{{ ansible_eda.event.payload.event.host_host }}
+  gather_facts: no
   become: true
 
   tasks:      
   - name: Create a ServiceNow Incident
     servicenow.itsm.incident:
-      instance:
-          host: "{{ sn_instance }}"
-          username: "{{ sn_username }}"
-          password: "{{ sn_password }}"
       state: new
       caller: "ansible"
       urgency: high
